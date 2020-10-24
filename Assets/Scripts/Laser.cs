@@ -6,7 +6,7 @@ public class Laser : MonoBehaviour
 {
 
     [SerializeField]
-    private float _laserspeed = 8f;
+    private float _laserSpeed = 8f;
 
 
     // Update is called once per frame
@@ -18,7 +18,7 @@ public class Laser : MonoBehaviour
 
     void LaserShoot()
         {
-            transform.Translate(Vector3.up * _laserspeed * Time.deltaTime);
+            transform.Translate(Vector3.up * _laserSpeed * Time.deltaTime);
         }
 
     void LaserDestroy()

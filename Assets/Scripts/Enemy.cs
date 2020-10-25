@@ -19,7 +19,6 @@ public class Enemy : MonoBehaviour
         //set speed
         transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
 
-
         //wrap & random
         float xRandom = Random.Range(-8, 8);
 
@@ -39,7 +38,6 @@ public class Enemy : MonoBehaviour
         {
             player.Damage();
         }
-
 
         if(other.tag == "Player")
         {

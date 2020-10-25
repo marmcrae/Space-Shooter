@@ -17,17 +17,22 @@ public class Player : MonoBehaviour
     private int _lives = 3;
 
     private float _canFire = 0f;
-
-
+    private SpawnManager _spawnManager;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
-        //take the current position and set it to (0, 0, 0)
         transform.position = new Vector3(0, 0, 0);
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+
+        if (_spawnManager == null)
+        {
+            Debug.LogError("Spawn Manager is NULL");
+        }
     }
+
 
     // Update is called once per frame
     void Update()
@@ -38,9 +43,8 @@ public class Player : MonoBehaviour
         {
             LaserBehavior();
         }
-
-
     }
+
 
     void CalculateMovement()
     {
@@ -70,6 +74,7 @@ public class Player : MonoBehaviour
         }
     }
 
+
     void LaserBehavior()
         {
            
@@ -85,6 +90,7 @@ public class Player : MonoBehaviour
 
         if (_lives <= 0)
         {
+            _spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
         }
     }

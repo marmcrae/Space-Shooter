@@ -23,6 +23,10 @@ public class Laser : MonoBehaviour
 
     void LaserDestroy()
     {
+        if (transform.parent != null)
+        {
+            Destroy(transform.parent.gameObject);
+        }
         if (transform.position.y > 8f)
         {
             Destroy(this.gameObject);

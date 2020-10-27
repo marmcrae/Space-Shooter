@@ -23,12 +23,14 @@ public class Player : MonoBehaviour
     private GameObject _tripleShotPrefab;
 
     [SerializeField]
-    private bool _isTripleShotActive = false;
-    
-    [SerializeField]
-    private bool _isSpeedPowerupActive = false;
+    private GameObject _shieldSprite;
 
-    
+
+    private bool _isTripleShotActive = false;
+    private bool _isSpeedPowerupActive = false;
+    [SerializeField]
+    private bool _isShieldsActive = false;
+
     private float _canFire = 0f;
     private SpawnManager _spawnManager;
 
@@ -106,6 +108,13 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+        if(_isShieldsActive == true)
+        {   
+            _isShieldsActive = false;
+            _shieldSprite.gameObject.SetActive(false);
+            return;
+        }
+   
         _lives -= 1;
 
         if (_lives <= 0)
@@ -140,8 +149,13 @@ public class Player : MonoBehaviour
         _isSpeedPowerupActive = false;
         _speed /= _speedBoost;
     }
- 
 
+
+    public void ShieldBoostActive()
+    {
+        _isShieldsActive = true;
+        _shieldSprite.gameObject.SetActive(true);
+    }
 }
 
 

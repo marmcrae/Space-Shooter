@@ -47,7 +47,7 @@ public class TriplePowerUp : MonoBehaviour
                     break;
 
                 case 2:
-                    Debug.Log("Shield");
+                    player.ShieldBoostActive();
                     break;
 
                 default:

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro.EditorUtilities;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -17,6 +19,9 @@ public class Player : MonoBehaviour
     private int _lives = 3;
 
     [SerializeField]
+    private int _score = 0;
+
+    [SerializeField]
     private GameObject _laserPrefab;
    
     [SerializeField]
@@ -28,11 +33,11 @@ public class Player : MonoBehaviour
 
     private bool _isTripleShotActive = false;
     private bool _isSpeedPowerupActive = false;
-    [SerializeField]
     private bool _isShieldsActive = false;
 
     private float _canFire = 0f;
     private SpawnManager _spawnManager;
+    private UIManager _uiManager;
 
 
 
@@ -41,10 +46,16 @@ public class Player : MonoBehaviour
     {
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+
 
         if (_spawnManager == null)
         {
             Debug.LogError("Spawn Manager is NULL");
+        }
+        if (_uiManager == null)
+        {
+            Debug.LogError("The UI Manager is NULL");
         }
     }
 
@@ -84,7 +95,7 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(-11f, transform.position.y, 0);
         }
-        else if (transform.position.x < -11f)
+        else if(transform.position.x < -11f)
         {
             transform.position = new Vector3(11f, transform.position.y, 0);
         }
@@ -116,8 +127,14 @@ public class Player : MonoBehaviour
         }
    
         _lives -= 1;
+        _uiManager.UpdateLives(_lives);
 
-        if (_lives <= 0)
+        if(_lives < 0)
+        {
+            _lives = 0;
+        }
+
+         if (_lives == 0)
         {
             _spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
@@ -155,6 +172,12 @@ public class Player : MonoBehaviour
     {
         _isShieldsActive = true;
         _shieldSprite.gameObject.SetActive(true);
+    }
+
+    public void AddPoints(int points)
+    {
+        _score += points;
+        _uiManager.UpdateScore(_score);
     }
 }
 

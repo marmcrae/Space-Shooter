@@ -8,9 +8,9 @@ public class TriplePowerUp : MonoBehaviour
     [SerializeField]
     private float _powerUpSpeed = 3f;
 
-    [SerializeField]// 0 = Triple shot; 1 = Speed; 2 = Shields
+    [SerializeField]
+    // 0 = Triple shot; 1 = Speed; 2 = Shields
     private int powerupId;
-
 
 
     // Update is called once per frame
@@ -19,15 +19,16 @@ public class TriplePowerUp : MonoBehaviour
         PowerUpBehavior();
     }
 
+
     void PowerUpBehavior()
     {
         transform.Translate(Vector3.down * _powerUpSpeed * Time.deltaTime);
-
         if(transform.position.y < -5.5)
         {
             Destroy(this.gameObject);
         }
     }
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {

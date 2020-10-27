@@ -16,12 +16,10 @@ public class Enemy : MonoBehaviour
 
     void EnemyBehavior()
     {
-        //set speed
+       
         transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
-
-        //wrap & random
+        
         float xRandom = Random.Range(-8, 8);
-
         if (transform.position.y < -5.5f)
         {
             transform.position = new Vector3(xRandom, 7f, 0);

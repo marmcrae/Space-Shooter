@@ -4,22 +4,10 @@ using UnityEngine;
 
 public class TriplePowerUp : MonoBehaviour
 {
-    /*
-   //create powerup variable serial
-    move down at a speed of 3
-    destroy the object at bottom of the screen
-    collision with player only tags  On Collected destro
-   */
 
     [SerializeField]
     private float _powerUpSpeed = 3f;
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()

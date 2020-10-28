@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         Debug.Log("GameManager:: GameOver() Called");
-        _isGameOver = true;
-       
+        _isGameOver = true;   
     }
 }

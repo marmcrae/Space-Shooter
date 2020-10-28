@@ -30,6 +30,11 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _shieldSprite;
 
+    [SerializeField]
+    private GameObject _leftEngineDown;
+    [SerializeField]
+    private GameObject _rightEngineDown;
+
 
     private bool _isTripleShotActive = false;
     private bool _isSpeedPowerupActive = false;
@@ -132,6 +137,15 @@ public class Player : MonoBehaviour
         if(_lives < 0)
         {
             _lives = 0;
+        }
+
+        if(_lives == 2)
+        {
+            _rightEngineDown.SetActive(true);
+        }
+        else if(_lives == 1)
+        {
+            _leftEngineDown.SetActive(true);
         }
 
          if (_lives == 0)

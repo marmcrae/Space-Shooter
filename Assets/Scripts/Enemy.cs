@@ -7,6 +7,13 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float _enemySpeed = 4f;
 
+    [SerializeField]
+    private float _fireRate = 3.0f;
+
+    [SerializeField]
+    private GameObject _laserPrefab;
+
+    private float _canFire = -1;
     private Player _player;
     private Animator _animator;
 
@@ -25,15 +32,28 @@ public class Enemy : MonoBehaviour
         {
             Debug.LogError("Ainmator is NULL");
         }
-
     }
 
 
     // Update is called once per frame
     void Update()
     {
-        EnemyBehavior();          
+        EnemyBehavior();    
+        
+        if (Time.time > _canFire)
+        {
+            _fireRate = (Random.Range(3f, 7f));
+            _canFire = Time.time + _fireRate;
+            GameObject enemyLaser = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
+            Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+
+            for (int i = 0; i < lasers.Length; i++)
+            {
+                lasers[i].EnemyLaserOn();
+            }
+        }
     }
+
 
     void EnemyBehavior()
     {
@@ -50,7 +70,8 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        
+
+
         if(other.tag == "Player")
         {
             if (_player != null)
@@ -59,23 +80,29 @@ public class Enemy : MonoBehaviour
             }
 
             Destroy(this.gameObject, 2.3f);
+            Debug.Log("Enemy.cs line 82");
             _enemySpeed = 0.7f;
             _animator.SetTrigger("OnEnemyDeath");
         }
 
 
-        if(other.tag == "Laser")
-        {
+        if(other.tag == "Laser" && other.tag != "EnemyLaser")
+        { 
             Destroy(other.gameObject);
 
-            if (_player != null) 
+            if (_player != null ) 
             {
+                Debug.Log("Enemy.cs line 96");
+                Destroy(this.gameObject, 2.3f);
                 _player.AddPoints(10);
             }
-
-            Destroy(this.gameObject, 2.3f);
-            _enemySpeed = 0.7f;
-            _animator.SetTrigger("OnEnemyDeath");
         }
+
+       
+        Debug.Log("Enemy.cs line 102");
+        _enemySpeed = 0.7f;
+        _animator.SetTrigger("OnEnemyDeath");
+
+        Destroy(GetComponent<Collider2D>());
     }
 }

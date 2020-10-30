@@ -12,6 +12,9 @@ public class TriplePowerUp : MonoBehaviour
     // 0 = Triple shot; 1 = Speed; 2 = Shields
     private int powerupId;
 
+    [SerializeField]
+    private AudioClip _powerClip;
+
 
     // Update is called once per frame
     void Update()
@@ -33,6 +36,8 @@ public class TriplePowerUp : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         Player player = other.transform.GetComponent<Player>();
+
+        AudioSource.PlayClipAtPoint(_powerClip, transform.position);
 
         if(player != null)
         {

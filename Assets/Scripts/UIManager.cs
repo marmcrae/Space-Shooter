@@ -14,6 +14,9 @@ public class UIManager : MonoBehaviour
     private Text _gameOver;
 
     [SerializeField]
+    private Text _ammoText;
+
+    [SerializeField]
     private Text _restartText;
 
     [SerializeField]
@@ -41,6 +44,28 @@ public class UIManager : MonoBehaviour
     {
         _scoreText.text = "Score: " + playerScore.ToString();
     
+    }
+
+    public void UpdateAmmo(int playerAmmo)
+    {
+        _ammoText.text = "Ammo: " + playerAmmo.ToString();
+
+        if (playerAmmo == 0)
+        {
+            StartCoroutine(LowAmmoFlicker());
+        }
+        IEnumerator LowAmmoFlicker()
+        {
+            while (true)
+            {
+                _ammoText.gameObject.SetActive(true);
+                yield return new WaitForSeconds(0.5f);
+                _ammoText.gameObject.SetActive(false);
+                yield return new WaitForSeconds(0.5f);
+                _ammoText.gameObject.SetActive(false);
+            }
+        }
+
     }
 
     public void UpdateLives(int currentLives)

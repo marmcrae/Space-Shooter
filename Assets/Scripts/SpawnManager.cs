@@ -8,6 +8,9 @@ public class SpawnManager : MonoBehaviour
     private GameObject _enemyPrefab;
 
     [SerializeField]
+    private GameObject _enemyZigZagPrefab;
+
+    [SerializeField]
     private GameObject _enemyContainer;
 
     [SerializeField]
@@ -36,12 +39,14 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnEnemyRoutine()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2.5f);
 
         while (_stopSpawning == false)
         {
             GameObject newEnemy = Instantiate(_enemyPrefab, new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+            GameObject newEnemyZigZag = Instantiate(_enemyZigZagPrefab, new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;
+            newEnemyZigZag.transform.parent = _enemyContainer.transform;
             yield return new WaitForSeconds(spawnWaitTime);
         }
       

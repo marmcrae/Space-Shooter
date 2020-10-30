@@ -128,27 +128,27 @@ public class Player : MonoBehaviour
     void LaserBehavior()
     {
         _canFire = Time.time + _fireRate;
-
-        if (_isTripleShotActive == true)
-        {
-            Instantiate(_tripleShotPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
-        }
-        else
-        {
-            Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
-        }
-
         _ammo--;
 
-        if( _ammo < 0)
+        if (_ammo < 0)
         {
             _ammo = 0;
         }
 
         _uiManager.UpdateAmmo(_ammo);
-
+        if (_ammo != 0) 
+        {
+            if (_isTripleShotActive == true)
+            {
+                Instantiate(_tripleShotPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+            }
+            else
+            {
+                Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+            }
+            _audioSource.Play();
+        }
        
-        _audioSource.Play();
     }
  
 
@@ -218,10 +218,20 @@ public class Player : MonoBehaviour
         _shieldSprite.gameObject.SetActive(true);
     }
 
+
     public void AddPoints(int points)
     {
         _score += points;
         _uiManager.UpdateScore(_score);
+    }
+
+
+    public void ThrusterBoost()
+    {
+        if(Input.GetKey(KeyCode.LeftShift))
+        {
+            _speed *= 1.4f;
+        }
     }
 }
 

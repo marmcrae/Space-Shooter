@@ -81,10 +81,11 @@ public class Enemy : MonoBehaviour
             }
 
             Destroy(this.gameObject, 2.3f);
-            Debug.Log("Enemy.cs line 82");
-            _enemySpeed = 0.7f;
+            Debug.Log("Hit by player: Enemy.cs line 84");
+            _enemySpeed = 0.5f;
             _animator.SetTrigger("OnEnemyDeath");
         }
+
 
 
         if(other.tag == "Laser")
@@ -96,7 +97,7 @@ public class Enemy : MonoBehaviour
                 Debug.Log("Enemy.cs line 96");
                 Destroy(this.gameObject, 2.3f);
                 _player.AddPoints(10);
-                Debug.Log("Enemy.cs line 102");
+                Debug.Log("Hit by Laser. Enemy.cs line 102");
                 _enemySpeed = 0.7f;
                 _animator.SetTrigger("OnEnemyDeath");
             }

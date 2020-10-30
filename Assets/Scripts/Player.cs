@@ -22,6 +22,9 @@ public class Player : MonoBehaviour
     private int _score = 0;
 
     [SerializeField]
+    private int _ammo = 15;
+
+    [SerializeField]
     private GameObject _laserPrefab;
    
     [SerializeField]
@@ -135,6 +138,16 @@ public class Player : MonoBehaviour
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
         }
 
+        _ammo--;
+
+        if( _ammo < 0)
+        {
+            _ammo = 0;
+        }
+
+        _uiManager.UpdateAmmo(_ammo);
+
+       
         _audioSource.Play();
     }
  

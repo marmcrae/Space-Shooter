@@ -30,7 +30,7 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _scoreText.text = "Score: " +  0;
+        _scoreText.text = "SCORE: " +  0;
         _gameOver.gameObject.SetActive(false);
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
 
@@ -42,13 +42,13 @@ public class UIManager : MonoBehaviour
 
     public void UpdateScore(int playerScore)
     {
-        _scoreText.text = "Score: " + playerScore.ToString();
+        _scoreText.text = "SCORE: " + playerScore.ToString();
     
     }
 
     public void UpdateAmmo(int playerAmmo)
     {
-        _ammoText.text = "Ammo: " + playerAmmo.ToString();
+        _ammoText.text = "AMMO: " + playerAmmo.ToString();
 
         if (playerAmmo == 0)
         {

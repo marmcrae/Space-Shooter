@@ -44,6 +44,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Laser_Left
       objectReference: {fileID: 0}
+    - target: {fileID: 7721021695494788945, guid: 6f5bc5f650d849c478bee1f906d76f7c,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 7721021695494788975, guid: 6f5bc5f650d849c478bee1f906d76f7c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -133,6 +138,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Laser_Right
+      objectReference: {fileID: 0}
+    - target: {fileID: 7721021695494788945, guid: 6f5bc5f650d849c478bee1f906d76f7c,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 7721021695494788975, guid: 6f5bc5f650d849c478bee1f906d76f7c,
         type: 3}

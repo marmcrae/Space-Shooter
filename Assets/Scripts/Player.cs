@@ -26,9 +26,11 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private GameObject _laserPrefab;
-   
+    [SerializeField]
+    private GameObject _superLaserPrefab;
     [SerializeField]
     private GameObject _tripleShotPrefab;
+
     [SerializeField]
     private GameObject _shieldSprite;
     [SerializeField]
@@ -39,9 +41,6 @@ public class Player : MonoBehaviour
     private GameObject _negativeSprite;
     [SerializeField]
     private GameObject _superLaserSprite;
-    [SerializeField]
-    private GameObject _superLaserPrefab;
-
 
     [SerializeField]
     private GameObject _leftEngineDown;
@@ -58,7 +57,7 @@ public class Player : MonoBehaviour
     private bool _isShieldsActive = false;
     private bool _isAmmoBoostActive = false;
     private bool _isHealthBoostActive = false;
-    private bool _isNegativeBoost = false;
+    private bool _isNegativeBoostActive = false;
     private bool _isSuperLaserActive = false;
 
     private float _canFire = 0f;
@@ -148,7 +147,7 @@ public class Player : MonoBehaviour
 
         _uiManager.UpdateAmmo(_ammo);
 
-        if (_ammo != 0 && _isNegativeBoost == false) 
+        if (_ammo != 0 && _isNegativeBoostActive == false) 
         {
             _ammo--;
 
@@ -221,7 +220,6 @@ public class Player : MonoBehaviour
     }
 
  
-
     public void SpeedBoostActive()
     {
         _isSpeedPowerupActive = true;
@@ -254,10 +252,18 @@ public class Player : MonoBehaviour
     {
         _isHealthBoostActive = true;
 
-        if(_lives < 3) 
+        if(_lives == 2) 
         {
             _lives += 1;
             _uiManager.UpdateLives(_lives);
+            _rightEngineDown.SetActive(false);
+            _leftEngineDown.SetActive(false);
+        }
+        else if(_lives == 1)
+        {
+            _lives += 1;
+            _uiManager.UpdateLives(_lives);
+            _rightEngineDown.SetActive(false);
         }
         
         if (_lives > 3)
@@ -269,13 +275,13 @@ public class Player : MonoBehaviour
 
     public void NegativeBoost()
     {
-        _isNegativeBoost = true;
+        _isNegativeBoostActive = true;
         StartCoroutine(SetNegativeToFalse());
 
         IEnumerator SetNegativeToFalse()
         {
             yield return new WaitForSeconds(5f);
-            _isNegativeBoost = false;
+            _isNegativeBoostActive = false;
         }
     }
 

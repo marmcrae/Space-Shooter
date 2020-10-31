@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    
     [SerializeField]
     private Text _scoreText;
 
@@ -65,7 +64,6 @@ public class UIManager : MonoBehaviour
                 _ammoText.gameObject.SetActive(false);
             }
         }
-
     }
 
     public void UpdateLives(int currentLives)

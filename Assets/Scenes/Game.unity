@@ -1090,13 +1090,14 @@ MonoBehaviour:
     type: 3}
   _healthBoostSprite: {fileID: 3760344830418744072, guid: bcd355fbe42b89642bfc0292a0a57503,
     type: 3}
-  _negativeSprite: {fileID: 0}
+  _negativeSprite: {fileID: 5932776286653542093, guid: 119c147fa8685c643b683c3063e5b926,
+    type: 3}
+  _superLaserSprite: {fileID: 3096976508271038330, guid: fb662150b21660c449154e20c03fd941,
+    type: 3}
+  _superLaserPrefab: {fileID: 0}
   _leftEngineDown: {fileID: 1614430746}
   _rightEngineDown: {fileID: 176567845}
   _laserClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
-  _isAmmoBoostActive: 0
-  _isHealthBoostActive: 0
-  _isNegativeBoost: 0
 --- !u!212 &1000835340
 SpriteRenderer:
   m_ObjectHideFlags: 0

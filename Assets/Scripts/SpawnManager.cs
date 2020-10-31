@@ -17,7 +17,10 @@ public class SpawnManager : MonoBehaviour
     private GameObject[] _powerUp;
 
     [SerializeField]
-    private float spawnWaitTime = 5.0f;
+    private float _spawnWaitTime = 5.0f;
+
+    [SerializeField]
+    private float[] _spawnWave;
 
     
     private bool _stopSpawning = false;
@@ -39,17 +42,17 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnEnemyRoutine()
     {
-        yield return new WaitForSeconds(2.5f);
+        
+            yield return new WaitForSeconds(5f);
 
-        while (_stopSpawning == false)
-        {
-            GameObject newEnemy = Instantiate(_enemyPrefab, new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-            GameObject newEnemyZigZag = Instantiate(_enemyZigZagPrefab, new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-            newEnemy.transform.parent = _enemyContainer.transform;
-            newEnemyZigZag.transform.parent = _enemyContainer.transform;
-            yield return new WaitForSeconds(spawnWaitTime);
-        }
-      
+            while (_stopSpawning == false)
+            {
+                GameObject newEnemy = Instantiate(_enemyPrefab, new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                GameObject newEnemyZigZag = Instantiate(_enemyZigZagPrefab, new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                newEnemy.transform.parent = _enemyContainer.transform;
+                newEnemyZigZag.transform.parent = _enemyContainer.transform;
+                yield return new WaitForSeconds(_spawnWaitTime);
+            }
     }
 
 
@@ -59,9 +62,9 @@ public class SpawnManager : MonoBehaviour
 
         while (_stopSpawning == false)
         {
-            int randomPowerUp = Random.Range(0, 3);
+            int randomPowerUp = Random.Range(0, 6);
             Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-            yield return new WaitForSeconds(Random.Range(3.0f, 8.0f));
+            yield return new WaitForSeconds(Random.Range(1.0f, 8.0f));
         } 
     }
 

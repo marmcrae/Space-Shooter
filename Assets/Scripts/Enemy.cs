@@ -71,7 +71,8 @@ public class Enemy : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
 
-        Debug.Log("the object is " + other.name + "tag is " + other.tag);
+        Debug.Log(gameObject.name + ": " + "the object is " + other.name + "tag is " + other.tag);
+      
 
         if(other.tag == "Player")
         {

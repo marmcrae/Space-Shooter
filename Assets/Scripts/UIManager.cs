@@ -48,7 +48,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateAmmo(int playerAmmo)
     {
-        _ammoText.text = "AMMO: " + playerAmmo.ToString();
+        _ammoText.text = "CURRENT AMMO: " + playerAmmo.ToString();
 
         if (playerAmmo == 0)
         {
@@ -59,9 +59,9 @@ public class UIManager : MonoBehaviour
             while (true)
             {
                 _ammoText.gameObject.SetActive(true);
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(1f);
                 _ammoText.gameObject.SetActive(false);
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(1f);
                 _ammoText.gameObject.SetActive(false);
             }
         }

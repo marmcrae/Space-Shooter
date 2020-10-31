@@ -174,7 +174,11 @@ MonoBehaviour:
   - {fileID: 2417625364136290675, guid: 73bac45e4c838234db487fd399ba9fcd, type: 3}
   - {fileID: 1381201908585666484, guid: e89f2371b50d8e34aa4fd599b85e91bc, type: 3}
   - {fileID: 178054035550356677, guid: 66e5b18e90834e6469893be5e4feca13, type: 3}
-  spawnWaitTime: 3
+  - {fileID: 8656103526878770830, guid: 30f58335272caef4798e9cf24c0542a8, type: 3}
+  - {fileID: 3760344830418744072, guid: bcd355fbe42b89642bfc0292a0a57503, type: 3}
+  - {fileID: 5932776286653542093, guid: 119c147fa8685c643b683c3063e5b926, type: 3}
+  _spawnWaitTime: 5
+  _spawnWave: []
 --- !u!1 &42891358
 GameObject:
   m_ObjectHideFlags: 0
@@ -1082,9 +1086,17 @@ MonoBehaviour:
   _tripleShotPrefab: {fileID: 7343522296572310667, guid: 508cf02c82f0441449a1feaaa64c1362,
     type: 3}
   _shieldSprite: {fileID: 65341771}
+  _ammoBoostSprite: {fileID: 8656103526878770830, guid: 30f58335272caef4798e9cf24c0542a8,
+    type: 3}
+  _healthBoostSprite: {fileID: 3760344830418744072, guid: bcd355fbe42b89642bfc0292a0a57503,
+    type: 3}
+  _negativeSprite: {fileID: 0}
   _leftEngineDown: {fileID: 1614430746}
   _rightEngineDown: {fileID: 176567845}
   _laserClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
+  _isAmmoBoostActive: 0
+  _isHealthBoostActive: 0
+  _isNegativeBoost: 0
 --- !u!212 &1000835340
 SpriteRenderer:
   m_ObjectHideFlags: 0

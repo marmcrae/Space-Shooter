@@ -29,9 +29,19 @@ public class Player : MonoBehaviour
    
     [SerializeField]
     private GameObject _tripleShotPrefab;
-
     [SerializeField]
     private GameObject _shieldSprite;
+    [SerializeField]
+    private GameObject _ammoBoostSprite;
+    [SerializeField]
+    private GameObject _healthBoostSprite;
+    [SerializeField]
+    private GameObject _negativeSprite;
+    [SerializeField]
+    private GameObject _superLaserSprite;
+    [SerializeField]
+    private GameObject _superLaserPrefab;
+
 
     [SerializeField]
     private GameObject _leftEngineDown;
@@ -46,6 +56,10 @@ public class Player : MonoBehaviour
     private bool _isTripleShotActive = false;
     private bool _isSpeedPowerupActive = false;
     private bool _isShieldsActive = false;
+    private bool _isAmmoBoostActive = false;
+    private bool _isHealthBoostActive = false;
+    private bool _isNegativeBoost = false;
+    private bool _isSuperLaserActive = false;
 
     private float _canFire = 0f;
     private SpawnManager _spawnManager;
@@ -62,7 +76,6 @@ public class Player : MonoBehaviour
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _audioSource = GetComponent<AudioSource>();
 
-
         if (_spawnManager == null)
         {
             Debug.LogError("Spawn Manager is NULL");
@@ -78,8 +91,7 @@ public class Player : MonoBehaviour
         else
         {
             _audioSource.clip = _laserClip;
-        }
-               
+        }           
     }
 
 
@@ -128,7 +140,6 @@ public class Player : MonoBehaviour
     void LaserBehavior()
     {
         _canFire = Time.time + _fireRate;
-        _ammo--;
 
         if (_ammo < 0)
         {
@@ -136,11 +147,18 @@ public class Player : MonoBehaviour
         }
 
         _uiManager.UpdateAmmo(_ammo);
-        if (_ammo != 0) 
+
+        if (_ammo != 0 && _isNegativeBoost == false) 
         {
+            _ammo--;
+
             if (_isTripleShotActive == true)
             {
                 Instantiate(_tripleShotPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+            }
+            else if(_isSuperLaserActive == true)
+            {
+                Instantiate(_superLaserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
             }
             else
             {
@@ -148,7 +166,6 @@ public class Player : MonoBehaviour
             }
             _audioSource.Play();
         }
-       
     }
  
 
@@ -191,12 +208,19 @@ public class Player : MonoBehaviour
           _isTripleShotActive = true;
           StartCoroutine(PowerDown());
     }
+    public void SuperLaserActive()
+    {
+        _isSuperLaserActive = true;
+        StartCoroutine(PowerDown());
+    }
     IEnumerator PowerDown()
     {
         yield return new WaitForSeconds(5f);
         _isTripleShotActive = false;
+        _isSuperLaserActive = false;
     }
 
+ 
 
     public void SpeedBoostActive()
     {
@@ -216,6 +240,43 @@ public class Player : MonoBehaviour
     {
         _isShieldsActive = true;
         _shieldSprite.gameObject.SetActive(true);
+    }
+
+
+    public void AmmoBoost()
+    {
+        _isAmmoBoostActive = true;
+        _ammo = 15;
+        _uiManager.UpdateAmmo(_ammo);
+    }
+
+    public void HealthBoost()
+    {
+        _isHealthBoostActive = true;
+
+        if(_lives < 3) 
+        {
+            _lives += 1;
+            _uiManager.UpdateLives(_lives);
+        }
+        
+        if (_lives > 3)
+        {
+            _lives = 3;
+        }
+    }
+
+
+    public void NegativeBoost()
+    {
+        _isNegativeBoost = true;
+        StartCoroutine(SetNegativeToFalse());
+
+        IEnumerator SetNegativeToFalse()
+        {
+            yield return new WaitForSeconds(5f);
+            _isNegativeBoost = false;
+        }
     }
 
 

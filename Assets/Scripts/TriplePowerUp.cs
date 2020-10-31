@@ -9,7 +9,7 @@ public class TriplePowerUp : MonoBehaviour
     private float _powerUpSpeed = 3f;
 
     [SerializeField]
-    // 0 = Triple shot; 1 = Speed; 2 = Shields
+    // 0 = Triple shot; 1 = Speed; 2 = Shields; 3 = Ammo; 4 = Health; 5 = Negative;
     private int powerupId;
 
     [SerializeField]
@@ -54,6 +54,18 @@ public class TriplePowerUp : MonoBehaviour
 
                 case 2:
                     player.ShieldBoostActive();
+                    break;
+
+                case 3:
+                    player.AmmoBoost();
+                    break;
+
+                case 4:
+                    player.HealthBoost();
+                    break;
+
+                case 5:
+                    player.NegativeBoost();
                     break;
 
                 default:

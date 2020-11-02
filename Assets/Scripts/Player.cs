@@ -19,6 +19,9 @@ public class Player : MonoBehaviour
     private int _lives = 3;
 
     [SerializeField]
+    private int _shieldsRemaining = 3;
+
+    [SerializeField]
     private int _score = 0;
 
     [SerializeField]
@@ -54,15 +57,16 @@ public class Player : MonoBehaviour
 
     private bool _isTripleShotActive = false;
     private bool _isSpeedPowerupActive = false;
-    private bool _isShieldsActive = false;
     private bool _isAmmoBoostActive = false;
     private bool _isHealthBoostActive = false;
     private bool _isNegativeBoostActive = false;
     private bool _isSuperLaserActive = false;
+    public bool isShieldsActive = false;
 
     private float _canFire = 0f;
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
+    private ShakeBehavior _shakeBehavior;
  
 
 
@@ -73,6 +77,7 @@ public class Player : MonoBehaviour
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _shakeBehavior = GameObject.Find("Main Camera").GetComponent<ShakeBehavior>();
         _audioSource = GetComponent<AudioSource>();
 
         if (_spawnManager == null)
@@ -82,6 +87,10 @@ public class Player : MonoBehaviour
         if (_uiManager == null)
         {
             Debug.LogError("The UI Manager is NULL");
+        }
+        if(_shakeBehavior == null)
+        {
+            Debug.LogError("Main Camera Shake behavior is NULL");
         }
         if( _audioSource == null)
         {
@@ -105,7 +114,7 @@ public class Player : MonoBehaviour
         }    
     }
 
-
+   
     void CalculateMovement()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
@@ -170,13 +179,13 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
-        if(_isShieldsActive == true)
-        {   
-            _isShieldsActive = false;
-            _shieldSprite.gameObject.SetActive(false);
+        if(isShieldsActive == true)
+        { 
+            ShieldsBehavior();   
             return;
         }
-   
+
+        _shakeBehavior.TriggerShake();
         _lives -= 1;
         _uiManager.UpdateLives(_lives);
 
@@ -198,6 +207,24 @@ public class Player : MonoBehaviour
         {
             _spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
+        }
+    }
+
+
+    public void ShieldsBehavior()
+    {
+        _shieldsRemaining -= 1;
+
+        if (_shieldsRemaining > 0)
+        {
+            _uiManager.UpdateShield(_shieldsRemaining);
+        }
+        else if (_shieldsRemaining <= 0)
+        {
+            _shieldsRemaining = 0;
+            isShieldsActive = false;
+            _shieldSprite.gameObject.SetActive(false);
+            _uiManager.UpdateShield(_shieldsRemaining);
         }
     }
 
@@ -236,8 +263,11 @@ public class Player : MonoBehaviour
 
     public void ShieldBoostActive()
     {
-        _isShieldsActive = true;
+        Debug.Log("ShieldBoostActive == true");
+        isShieldsActive = true;
         _shieldSprite.gameObject.SetActive(true);
+        _shieldsRemaining = 3;
+        _uiManager.UpdateShield(_shieldsRemaining);
     }
 
 

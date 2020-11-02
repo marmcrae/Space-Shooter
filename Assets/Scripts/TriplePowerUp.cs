@@ -68,6 +68,10 @@ public class TriplePowerUp : MonoBehaviour
                     player.NegativeBoost();
                     break;
 
+                case 6:
+                    player.SuperLaserActive();
+                    break;
+
                 default:
                     Debug.Log("Invalid Id");
                     break;

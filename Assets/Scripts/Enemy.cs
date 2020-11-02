@@ -70,10 +70,6 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-
-        Debug.Log(gameObject.name + ": " + "the object is " + other.name + "tag is " + other.tag);
-      
-
         if(other.tag == "Player")
         {
             if (_player != null)
@@ -82,11 +78,9 @@ public class Enemy : MonoBehaviour
             }
 
             Destroy(this.gameObject, 2.3f);
-            Debug.Log("Hit by player: Enemy.cs line 84");
             _enemySpeed = 0.5f;
             _animator.SetTrigger("OnEnemyDeath");
         }
-
 
 
         if(other.tag == "Laser")
@@ -95,20 +89,13 @@ public class Enemy : MonoBehaviour
 
             if (_player != null ) 
             {
-                Debug.Log("Enemy.cs line 96");
                 Destroy(this.gameObject, 2.3f);
                 _player.AddPoints(10);
-                Debug.Log("Hit by Laser. Enemy.cs line 102");
                 _enemySpeed = 0.7f;
                 _animator.SetTrigger("OnEnemyDeath");
             }
 
             Destroy(GetComponent<Collider2D>());
-        }
-
-       
-       
-
-        
+        }           
     }
 }

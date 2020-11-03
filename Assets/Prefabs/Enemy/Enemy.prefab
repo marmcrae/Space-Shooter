@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2394599238370823985}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: OrgEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52,6 +52,9 @@ MonoBehaviour:
   _fireRate: 0
   _laserPrefab: {fileID: 2277915025424067856, guid: 9471b2f7601f70b4b8f2dac0913c6bf1,
     type: 3}
+  frequency: 10
+  magnitude: 1
+  speed: 1
 --- !u!212 &8606444011698527035
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -107,6 +107,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         CalculateMovement();
+        PowerUpCollect();
 
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
         {
@@ -229,6 +230,16 @@ public class Player : MonoBehaviour
     }
 
 
+    void PowerUpCollect()
+    {
+        if (Input.GetKey(KeyCode.C))
+        {
+            GameObject.FindWithTag("PowerUp").transform.position = 
+            Vector3.MoveTowards(GameObject.FindWithTag("PowerUp").transform.position, 
+            this.gameObject.transform.position, 10f * Time.deltaTime);
+        }
+    }
+    
     public void TripleShotActive()
     { 
           _isTripleShotActive = true;
@@ -263,7 +274,6 @@ public class Player : MonoBehaviour
 
     public void ShieldBoostActive()
     {
-        Debug.Log("ShieldBoostActive == true");
         isShieldsActive = true;
         _shieldSprite.gameObject.SetActive(true);
         _shieldsRemaining = 3;

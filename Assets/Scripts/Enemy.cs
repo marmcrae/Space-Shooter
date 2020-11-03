@@ -13,9 +13,23 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private GameObject _laserPrefab;
 
+    [SerializeField]
+    private float _frequency = 1.0f;
+   
+    [SerializeField]
+    private float _magnitude = 15.0f;
+    
+    [SerializeField]
+    private float _speed = 5.0f;
+
     private float _canFire = -1;
     private Player _player;
     private Animator _animator;
+
+    Vector3 position = new Vector3();
+    Vector3 pos;
+    Vector3 axis;
+
 
     private void Start()
     {
@@ -30,21 +44,30 @@ public class Enemy : MonoBehaviour
 
         if (_animator == null)
         {
-            Debug.LogError("Ainmator is NULL");
+            Debug.LogError("Animator is NULL");
         }
+
+        pos = transform.position;
+        axis = transform.right;
     }
 
 
     // Update is called once per frame
     void Update()
     {
-        EnemyBehavior();    
-        
+        EnemyBehavior();
+        LaserFire();   
+    }
+
+
+    void LaserFire()
+    {
         if (Time.time > _canFire)
         {
-            _fireRate = (Random.Range(3f, 7f));
+            _fireRate = (Random.Range(1f, 4f));
             _canFire = Time.time + _fireRate;
             GameObject enemyLaser = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
+
             Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
 
             for (int i = 0; i < lasers.Length; i++)
@@ -55,16 +78,39 @@ public class Enemy : MonoBehaviour
     }
 
 
-    void EnemyBehavior()
+    void EnemyShield()
     {
-       
-        transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
-        
-        float xRandom = Random.Range(-8, 8);
-        if (transform.position.y < -5.5f)
+        //need to randomly generate shield when instantiating
+    }
+
+
+    void EnemyBehavior()
+    { 
+        if(tag == "OrgEnemy")
         {
-            transform.position = new Vector3(xRandom, 7f, 0);
-        }
+            transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
+
+            float xRandom = Random.Range(-8, 8);
+
+            if (transform.position.y < -5.5f)
+            {
+                transform.position = new Vector3(xRandom, 7f, 0);
+            }          
+        }    
+        else if(tag == "GreenEnemy")
+        {
+            pos += Vector3.down * Time.deltaTime * _speed;
+            transform.position = pos + axis * Mathf.Sin(Time.time * _frequency) * _magnitude;
+
+            if (transform.position.y < -5.5f)
+            {
+                float xRandom = Random.Range(-8, 8);
+                pos = new Vector3(xRandom, 7f, 0);
+                transform.Translate(Vector3.down * Time.deltaTime * _speed);
+                transform.position = pos  * Mathf.Sin(Time.time * _frequency) * _magnitude;
+                Debug.Log(" Green Enemy Behavior position.y: " + transform.position.y);
+            }
+        }  
     }
 
 
@@ -78,12 +124,17 @@ public class Enemy : MonoBehaviour
             }
 
             Destroy(this.gameObject, 2.3f);
-            _enemySpeed = 0.5f;
+            _enemySpeed = 0f;
+            _frequency = 0f;
             _animator.SetTrigger("OnEnemyDeath");
         }
 
+        if (other.tag == "PowerUp")
+        {
+            Destroy(other.gameObject);  
+        }
 
-        if(other.tag == "Laser")
+        if (other.tag == "Laser")
         { 
             Destroy(other.gameObject);
 
@@ -91,7 +142,8 @@ public class Enemy : MonoBehaviour
             {
                 Destroy(this.gameObject, 2.3f);
                 _player.AddPoints(10);
-                _enemySpeed = 0.7f;
+                _enemySpeed = 0f;
+                _frequency = 0f;
                 _animator.SetTrigger("OnEnemyDeath");
             }
 

@@ -17,7 +17,7 @@ public class SpawnManager : MonoBehaviour
     private GameObject[] _powerUp;
 
     [SerializeField]
-    private float _spawnWaitTime = 5.0f;
+    private float _spawnWaitTime = 45f;
 
     [SerializeField]
     private float[] _spawnWave;
@@ -43,7 +43,7 @@ public class SpawnManager : MonoBehaviour
     IEnumerator SpawnEnemyRoutine()
     {
         
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(1f);
 
             while (_stopSpawning == false)
             {
@@ -58,24 +58,35 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnPowerUpRoutine()
     {
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(1f);
 
         while (_stopSpawning == false)
         {
             int randomPowerUp = Random.Range(0, 7);
             
-            if( randomPowerUp == 7)
+            if( randomPowerUp == 6)
+            //6 = super laser
             {
                 Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
                 yield return new WaitForSeconds(15f);
             }
-
+            else if(randomPowerUp == 5 || randomPowerUp == 4)
+            //5 = negative boost | 4 = health boost
+            {
+                Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                yield return new WaitForSeconds(10f);
+            }
+            else if (randomPowerUp == 3)
+            //3 = Ammo Boost
+            {
+                Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                yield return new WaitForSeconds(2f);
+            }
             else
             {
                 Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
                 yield return new WaitForSeconds(Random.Range(1.0f, 8.0f));
-            }
-           
+            }         
         } 
     }
 

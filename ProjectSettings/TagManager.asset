@@ -8,6 +8,9 @@ TagManager:
   - Triple_Shot
   - Triple_Shot_Power_Up
   - EnemyLaser
+  - GreenEnemy
+  - OrgEnemy
+  - PowerUp
   layers:
   - Default
   - TransparentFX

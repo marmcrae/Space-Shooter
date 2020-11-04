@@ -176,7 +176,6 @@ public class Player : MonoBehaviour
             _audioSource.Play();
         }
     }
- 
 
     public void Damage()
     {
@@ -207,10 +206,10 @@ public class Player : MonoBehaviour
          if (_lives == 0)
         {
             _spawnManager.OnPlayerDeath();
+            Debug.Log("Player Death" );
             Destroy(this.gameObject);
         }
     }
-
 
     public void ShieldsBehavior()
     {
@@ -229,10 +228,9 @@ public class Player : MonoBehaviour
         }
     }
 
-
     void PowerUpCollect()
     {
-        if (Input.GetKey(KeyCode.C))
+        if (Input.GetKey(KeyCode.C) && (GameObject.FindWithTag("PowerUp") != null))
         {
             GameObject.FindWithTag("PowerUp").transform.position = 
             Vector3.MoveTowards(GameObject.FindWithTag("PowerUp").transform.position, 
@@ -312,7 +310,6 @@ public class Player : MonoBehaviour
         }
     }
 
-
     public void NegativeBoost()
     {
         _isNegativeBoostActive = true;
@@ -325,13 +322,11 @@ public class Player : MonoBehaviour
         }
     }
 
-
     public void AddPoints(int points)
     {
         _score += points;
         _uiManager.UpdateScore(_score);
     }
-
 
     public void ThrusterBoost()
     {

@@ -20,40 +20,73 @@ public class SpawnManager : MonoBehaviour
     private float _spawnWaitTime = 45f;
 
     [SerializeField]
-    private float[] _spawnWave;
+    private GameObject[] _enemies;
 
-    
+    private int _maxEnemies;
+    private int _enemyCount;
+    private int _waveNumber;
+
+    private float _waveCoolDown;
     private bool _stopSpawning = false;
 
     
-
     // Start is called before the first frame update
     void Start()
     {
    
     }
 
+    IEnumerator SpawnEnemyWaves()
+    {
+        while (_waveNumber < 5) // 5th = boss wave
+        {
+            yield return new WaitForSeconds(_waveCoolDown);
+            _stopSpawning = false;
+            StartSpawning();
+            while (_stopSpawning == false && (_enemyCount <= _maxEnemies))
+            {
+                Instantiate(_enemies[Random.Range(0, 2)], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                _enemyCount += 1;
+                yield return new WaitForSeconds(_spawnWaitTime);
+            }
+
+            _enemyCount = 0;
+            _maxEnemies += 10;
+            _waveNumber += 1;
+
+            _stopSpawning = true;
+
+            yield return null;
+        }
+    }
+
+    public void ActivateSpawn()
+    {
+        StartCoroutine(SpawnEnemyWaves());
+    }
     public void StartSpawning()
     {
-        StartCoroutine(SpawnEnemyRoutine());
+       // StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerUpRoutine());
     }
 
 
-    IEnumerator SpawnEnemyRoutine()
-    {
+    //IEnumerator SpawnEnemyRoutine()
+    //{
         
-            yield return new WaitForSeconds(1f);
+    //        yield return new WaitForSeconds(1f);
 
-            while (_stopSpawning == false)
-            {
-                GameObject newEnemy = Instantiate(_enemyPrefab, new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-                GameObject newEnemyZigZag = Instantiate(_enemyZigZagPrefab, new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-                newEnemy.transform.parent = _enemyContainer.transform;
-                newEnemyZigZag.transform.parent = _enemyContainer.transform;
-                yield return new WaitForSeconds(_spawnWaitTime);
-            }
-    }
+    //        while (_stopSpawning == false && (_enemyCount <= _maxEnemies))
+    //        {
+       
+    //            GameObject newEnemy = Instantiate(_enemyPrefab, new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+    //            GameObject newEnemyZigZag = Instantiate(_enemyZigZagPrefab, new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity, _enemyContainer.transform);
+    //            newEnemy.transform.parent = _enemyContainer.transform;
+    //            newEnemyZigZag.transform.parent = _enemyContainer.transform;
+    //            _enemyCount++;
+    //            yield return new WaitForSeconds(_spawnWaitTime);
+    //        }
+    //}
 
 
     IEnumerator SpawnPowerUpRoutine()
@@ -80,7 +113,7 @@ public class SpawnManager : MonoBehaviour
             //3 = Ammo Boost
             {
                 Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-                yield return new WaitForSeconds(2f);
+                yield return new WaitForSeconds(3f);
             }
             else
             {
@@ -96,4 +129,23 @@ public class SpawnManager : MonoBehaviour
         _stopSpawning = true;
     }
 }
+
+/*
+ 
+ IEnumerator SpawnEnemyWaves()
+{
+
+
+}
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ */
  

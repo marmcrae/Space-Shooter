@@ -14,6 +14,9 @@ public class Enemy : MonoBehaviour
     private GameObject _laserPrefab;
 
     [SerializeField]
+    private GameObject _enemyShieldSprite;
+
+    [SerializeField]
     private float _frequency = 1.0f;
    
     [SerializeField]
@@ -21,6 +24,9 @@ public class Enemy : MonoBehaviour
     
     [SerializeField]
     private float _speed = 5.0f;
+
+    [SerializeField]
+    private bool _isEnemyShieldActive = false;
 
     private float _canFire = -1;
     private Player _player;
@@ -57,6 +63,7 @@ public class Enemy : MonoBehaviour
     {
         EnemyBehavior();
         LaserFire();   
+
     }
 
 
@@ -78,10 +85,13 @@ public class Enemy : MonoBehaviour
     }
 
 
-    void EnemyShield()
-    {
-        //need to randomly generate shield when instantiating
-    }
+    //void EnemyShield()
+    //{
+    //    //need to create in spawnManager random iteration of shields. 
+    //    _isEnemyShieldActive = false;
+    //    _enemyShieldSprite.gameObject.SetActive(false);
+
+    //}
 
 
     void EnemyBehavior()
@@ -108,19 +118,44 @@ public class Enemy : MonoBehaviour
                 pos = new Vector3(xRandom, 7f, 0);
                 transform.Translate(Vector3.down * Time.deltaTime * _speed);
                 transform.position = pos  * Mathf.Sin(Time.time * _frequency) * _magnitude;
-                Debug.Log(" Green Enemy Behavior position.y: " + transform.position.y);
             }
-        }  
+        }
+
+        else if (tag == "AggressiveEnemy")
+        { 
+            transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
+            var _aggressiveEnemyPos = this.gameObject.transform.position;
+            float _strikingDistance = Vector3.Distance(_aggressiveEnemyPos, _player.transform.position);
+
+            if (_strikingDistance <= 5f)
+            {
+         
+                Vector3.MoveTowards(_player.transform.position, this.gameObject.transform.position, 10f * Time.deltaTime);
+            }
+
+            float xRandom = Random.Range(-8, 8);
+
+            if (transform.position.y < -5.5f)
+            {
+                transform.position = new Vector3(xRandom, 7f, 0);
+            }
+        }
     }
 
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "Player")
+        if(other.tag == "Player" )
+        //{
+        //    && _isEnemyShieldActive == true
+        //    EnemyShield();
+        //}
+        //else
         {
             if (_player != null)
             {
                 _player.Damage();
+                Debug.Log("This is what is hitting you!!!! tag:" + this.gameObject);
             }
 
             Destroy(this.gameObject, 2.3f);
@@ -134,11 +169,16 @@ public class Enemy : MonoBehaviour
             Destroy(other.gameObject);  
         }
 
-        if (other.tag == "Laser")
-        { 
-            Destroy(other.gameObject);
+        if (other.tag == "Player" )
+        {
+        //    EnemyShield();
+        //&& _isEnemyShieldActive == true
+        //}
+        //else
+        //{
+        Destroy(other.gameObject);
 
-            if (_player != null ) 
+            if (_player != null)
             {
                 Destroy(this.gameObject, 2.3f);
                 _player.AddPoints(10);
@@ -148,6 +188,6 @@ public class Enemy : MonoBehaviour
             }
 
             Destroy(GetComponent<Collider2D>());
-        }           
+        }         
     }
 }

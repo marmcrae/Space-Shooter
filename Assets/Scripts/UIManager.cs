@@ -98,17 +98,14 @@ public class UIManager : MonoBehaviour
     {
         if (_player.isShieldsActive == true && currentShield > 0)
         {
-            Debug.Log("Update Shield UI called");
             _ShieldImage.gameObject.SetActive(true);
             _ShieldImage.sprite = _shieldSprite[currentShield];
-            Debug.Log("current shield index is: " + currentShield);
         }
         else
         {
             _ShieldImage.gameObject.SetActive(false);
         }          
     }
-
 
     void GameOverSequence()
     {
@@ -117,7 +114,6 @@ public class UIManager : MonoBehaviour
         _restartText.gameObject.SetActive(true);
         StartCoroutine(GameOverFlicker());
     }
-
 
     IEnumerator GameOverFlicker()
     {

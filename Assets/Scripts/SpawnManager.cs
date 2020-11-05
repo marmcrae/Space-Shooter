@@ -17,15 +17,15 @@ public class SpawnManager : MonoBehaviour
     private GameObject[] _powerUp;
 
     [SerializeField]
-    private float _spawnWaitTime = 45f;
+    private float _spawnWaitTime = 10f;
 
     [SerializeField]
     private GameObject[] _enemies;
 
     private int _maxEnemies = 5;
     private int _enemyInstantiationCount = 0;
-    public int _enemyCount;
-    private int _waveNumber;
+    public int _enemyCount = 0;
+    private int _waveNumber = 0;
 
     private float _waveCoolDown = 10f;
     private bool _stopSpawning = false;
@@ -56,27 +56,26 @@ public class SpawnManager : MonoBehaviour
                     _enemyInstantiationCount += 1;
                     _enemyCount += 1;
                     Debug.Log("In Loop SM53. EnemyInstantiation: " + _enemyInstantiationCount + " Enemy Count: " + _enemyCount);
-                    yield return new WaitForSeconds(_spawnWaitTime);
-              
+                    yield return new WaitForSeconds(_spawnWaitTime);             
             }
 
-            _enemyInstantiationCount = 0;
+           _enemyInstantiationCount = 0;
             
             Debug.Log("LINE 56 SM. Out of loop. Enemy count : " + _enemyCount + " Wave Count: " + _waveNumber);
-            //if (_enemyCount <= 0)
-            //{
-               // _enemyCount = 0;
+         
                 _maxEnemies += 5;
+
+            if (_enemyCount == 0) 
+            {
                 _waveNumber += 1;
                 _uiManager.UpdateLevel(_waveNumber);
-
-           // }
-
+            }
+              
             Debug.Log("LINE 64 SM. After enemy count 0. Enemy count: " + _enemyCount +  "Max Enemy count : " + _maxEnemies + " Wave Count: " + _waveNumber);
 
             _stopSpawning = true;
 
-            yield return null;
+           // yield return null;
         }
     }
 
@@ -93,26 +92,26 @@ public class SpawnManager : MonoBehaviour
 
         while (_stopSpawning == false)
         {
-            int randomPowerUp = Random.Range(0, 101);
-            
-            if( randomPowerUp <= 20)
+            int randomPowerUp = Random.Range(0, 7);
+
+            if (randomPowerUp == 6)
             //6 = super laser
             {
-                Instantiate(_powerUp[6], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-                //yield return new WaitForSeconds(5f);
+                Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+               
             }
-            else if(randomPowerUp > 21 && randomPowerUp < 70)
+            else if (randomPowerUp == 5)
             //5 = Ammo Boost
             {
-                Instantiate(_powerUp[5], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-               // yield return new WaitForSeconds(4f);
+                Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                // yield return new WaitForSeconds(4f);
             }
             else
             {
-                Instantiate(_powerUp[Random.Range(0, 5)], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-               // yield return new WaitForSeconds(Random.Range(1.0f, 8.0f));
-            }         
-        } 
+                Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                // yield return new WaitForSeconds(Random.Range(1.0f, 8.0f));
+            }
+        }
     }
 
 
@@ -120,4 +119,4 @@ public class SpawnManager : MonoBehaviour
     {
         _stopSpawning = true;
     }
-}
+} 

@@ -22,18 +22,26 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject[] _enemies;
 
-    private int _maxEnemies;
-    private int _enemyCount;
+    private int _maxEnemies = 5;
+    private int _enemyInstantiationCount = 0;
+    public int _enemyCount;
     private int _waveNumber;
 
-    private float _waveCoolDown;
+    private float _waveCoolDown = 10f;
     private bool _stopSpawning = false;
+
+    private UIManager _uiManager;
 
     
     // Start is called before the first frame update
     void Start()
     {
-   
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+
+        if(_uiManager == null)
+        {
+            Debug.Log("UI Manager is NULL");
+        }
     }
 
     IEnumerator SpawnEnemyWaves()
@@ -41,18 +49,30 @@ public class SpawnManager : MonoBehaviour
         while (_waveNumber < 5) // 5th = boss wave
         {
             yield return new WaitForSeconds(_waveCoolDown);
-            _stopSpawning = false;
-            StartSpawning();
-            while (_stopSpawning == false && (_enemyCount <= _maxEnemies))
-            {
-                Instantiate(_enemies[Random.Range(0, 2)], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-                _enemyCount += 1;
-                yield return new WaitForSeconds(_spawnWaitTime);
+    
+            while (_stopSpawning == false && (_enemyInstantiationCount <= _maxEnemies))
+            { 
+                    Instantiate(_enemies[Random.Range(0, 1)], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                    _enemyInstantiationCount += 1;
+                    _enemyCount += 1;
+                    Debug.Log("In Loop SM53. EnemyInstantiation: " + _enemyInstantiationCount + " Enemy Count: " + _enemyCount);
+                    yield return new WaitForSeconds(_spawnWaitTime);
+              
             }
 
-            _enemyCount = 0;
-            _maxEnemies += 10;
-            _waveNumber += 1;
+            _enemyInstantiationCount = 0;
+            
+            Debug.Log("LINE 56 SM. Out of loop. Enemy count : " + _enemyCount + " Wave Count: " + _waveNumber);
+            //if (_enemyCount <= 0)
+            //{
+               // _enemyCount = 0;
+                _maxEnemies += 5;
+                _waveNumber += 1;
+                _uiManager.UpdateLevel(_waveNumber);
+
+           // }
+
+            Debug.Log("LINE 64 SM. After enemy count 0. Enemy count: " + _enemyCount +  "Max Enemy count : " + _maxEnemies + " Wave Count: " + _waveNumber);
 
             _stopSpawning = true;
 
@@ -63,62 +83,34 @@ public class SpawnManager : MonoBehaviour
     public void ActivateSpawn()
     {
         StartCoroutine(SpawnEnemyWaves());
-    }
-    public void StartSpawning()
-    {
-       // StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerUpRoutine());
     }
-
-
-    //IEnumerator SpawnEnemyRoutine()
-    //{
-        
-    //        yield return new WaitForSeconds(1f);
-
-    //        while (_stopSpawning == false && (_enemyCount <= _maxEnemies))
-    //        {
-       
-    //            GameObject newEnemy = Instantiate(_enemyPrefab, new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-    //            GameObject newEnemyZigZag = Instantiate(_enemyZigZagPrefab, new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity, _enemyContainer.transform);
-    //            newEnemy.transform.parent = _enemyContainer.transform;
-    //            newEnemyZigZag.transform.parent = _enemyContainer.transform;
-    //            _enemyCount++;
-    //            yield return new WaitForSeconds(_spawnWaitTime);
-    //        }
-    //}
-
+ 
 
     IEnumerator SpawnPowerUpRoutine()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(5f);
 
         while (_stopSpawning == false)
         {
-            int randomPowerUp = Random.Range(0, 7);
+            int randomPowerUp = Random.Range(0, 101);
             
-            if( randomPowerUp == 6)
+            if( randomPowerUp <= 20)
             //6 = super laser
             {
-                Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-                yield return new WaitForSeconds(15f);
+                Instantiate(_powerUp[6], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                //yield return new WaitForSeconds(5f);
             }
-            else if(randomPowerUp == 5 || randomPowerUp == 4)
-            //5 = negative boost | 4 = health boost
+            else if(randomPowerUp > 21 && randomPowerUp < 70)
+            //5 = Ammo Boost
             {
-                Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-                yield return new WaitForSeconds(10f);
-            }
-            else if (randomPowerUp == 3)
-            //3 = Ammo Boost
-            {
-                Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-                yield return new WaitForSeconds(3f);
+                Instantiate(_powerUp[5], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+               // yield return new WaitForSeconds(4f);
             }
             else
             {
-                Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-                yield return new WaitForSeconds(Random.Range(1.0f, 8.0f));
+                Instantiate(_powerUp[Random.Range(0, 5)], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+               // yield return new WaitForSeconds(Random.Range(1.0f, 8.0f));
             }         
         } 
     }
@@ -129,23 +121,3 @@ public class SpawnManager : MonoBehaviour
         _stopSpawning = true;
     }
 }
-
-/*
- 
- IEnumerator SpawnEnemyWaves()
-{
-
-
-}
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- */
- 

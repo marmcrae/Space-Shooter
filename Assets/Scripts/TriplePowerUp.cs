@@ -57,7 +57,7 @@ public class TriplePowerUp : MonoBehaviour
                     break;
 
                 case 3:
-                    player.AmmoBoost();
+                    player.NegativeBoost();
                     break;
 
                 case 4:
@@ -65,7 +65,7 @@ public class TriplePowerUp : MonoBehaviour
                     break;
 
                 case 5:
-                    player.NegativeBoost();
+                    player.AmmoBoost();
                     break;
 
                 case 6:

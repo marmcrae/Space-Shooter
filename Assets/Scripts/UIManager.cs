@@ -19,6 +19,9 @@ public class UIManager : MonoBehaviour
     private Text _restartText;
 
     [SerializeField]
+    private Text _levelText;
+
+    [SerializeField]
     private Sprite [] _livesSprite;
 
     [SerializeField]
@@ -32,6 +35,7 @@ public class UIManager : MonoBehaviour
 
     private GameManager _gameManager;
     private Player _player;
+    private SpawnManager _spawnManager;
 
 
     // Start is called before the first frame update
@@ -41,23 +45,28 @@ public class UIManager : MonoBehaviour
         _gameOver.gameObject.SetActive(false);
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
         _player = GameObject.Find("Player").GetComponent<Player>();
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
 
         if (_gameManager == null)
         {
-            Debug.LogError("GameManager is NULL");
+            Debug.Log("GameManager is NULL");
         }
         if (_player == null)
         {
             Debug.Log("Player is NULL");
         }
+        if( _spawnManager == null)
+        {
+            Debug.Log("Spawn Manager is NULL");
+        }
+
         _ShieldImage.gameObject.SetActive(false);
     }
 
 
     public void UpdateScore(int playerScore)
     {
-        _scoreText.text = "SCORE: " + playerScore.ToString();
-    
+        _scoreText.text = "SCORE: " + playerScore.ToString();    
     }
 
 
@@ -79,6 +88,20 @@ public class UIManager : MonoBehaviour
                 yield return new WaitForSeconds(1f);
                 _ammoText.gameObject.SetActive(false);
             }
+        }
+    }
+
+    public void UpdateLevel(int waveCount)
+    {
+        
+        _levelText.text = "LEVEL " + waveCount.ToString() + " CLEARED!";
+        _levelText.gameObject.SetActive(true);
+
+        StartCoroutine(UpdateLevelCoroutine());
+
+        IEnumerator UpdateLevelCoroutine()
+        {
+            yield return new WaitForSeconds(2f);
         }
     }
 

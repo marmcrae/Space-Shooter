@@ -31,6 +31,7 @@ public class Enemy : MonoBehaviour
     private float _canFire = -1;
     private Player _player;
     private Animator _animator;
+    private SpawnManager _spawnManager;
 
     Vector3 position = new Vector3();
     Vector3 pos;
@@ -40,8 +41,9 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
-        
-        if(_player == null)
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+
+        if (_player == null)
         {
             Debug.LogError("Player is NULL");
         }
@@ -51,6 +53,11 @@ public class Enemy : MonoBehaviour
         if (_animator == null)
         {
             Debug.LogError("Animator is NULL");
+        }
+
+        if (_spawnManager == null)
+        {
+            Debug.LogError("Spawn Manager is NULL");
         }
 
         pos = transform.position;
@@ -63,7 +70,6 @@ public class Enemy : MonoBehaviour
     {
         EnemyBehavior();
         LaserFire();   
-
     }
 
 
@@ -84,14 +90,13 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    void EnemyShield()
+    {
+        //need to create in spawnManager random iteration of shields. 
+        //_isEnemyShieldActive = false;
+        //_enemyShieldSprite.gameObject.SetActive(false);
 
-    //void EnemyShield()
-    //{
-    //    //need to create in spawnManager random iteration of shields. 
-    //    _isEnemyShieldActive = false;
-    //    _enemyShieldSprite.gameObject.SetActive(false);
-
-    //}
+    }
 
 
     void EnemyBehavior()
@@ -146,19 +151,15 @@ public class Enemy : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(other.tag == "Player" )
-        //{
-        //    && _isEnemyShieldActive == true
-        //    EnemyShield();
-        //}
-        //else
+
         {
             if (_player != null)
             {
                 _player.Damage();
-                Debug.Log("This is what is hitting you!!!! tag:" + this.gameObject);
             }
 
             Destroy(this.gameObject, 2.3f);
+            _spawnManager._enemyCount--;
             _enemySpeed = 0f;
             _frequency = 0f;
             _animator.SetTrigger("OnEnemyDeath");
@@ -166,21 +167,19 @@ public class Enemy : MonoBehaviour
 
         if (other.tag == "PowerUp")
         {
-            Destroy(other.gameObject);  
+            //need to upgrade to smart ai
+            Destroy(other.gameObject);
         }
 
-        if (other.tag == "Player" )
+        if (other.tag == "Laser" )
         {
-        //    EnemyShield();
-        //&& _isEnemyShieldActive == true
-        //}
-        //else
-        //{
+      
         Destroy(other.gameObject);
 
             if (_player != null)
             {
-                Destroy(this.gameObject, 2.3f);
+                Destroy(this.gameObject, 1.5f);
+                _spawnManager._enemyCount--;
                 _player.AddPoints(10);
                 _enemySpeed = 0f;
                 _frequency = 0f;
@@ -188,6 +187,13 @@ public class Enemy : MonoBehaviour
             }
 
             Destroy(GetComponent<Collider2D>());
-        }         
+        } 
+        
+        if (tag == "EnemyShield")
+        {
+            //_isEnemyShieldActive = false;
+            Debug.Log("EnemyShield tag method called");
+            _enemyShieldSprite.gameObject.SetActive(false);
+        }
     }
 }

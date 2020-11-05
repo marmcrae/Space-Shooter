@@ -12,6 +12,8 @@ TagManager:
   - OrgEnemy
   - PowerUp
   - AggressiveEnemy
+  - BossEnemy
+  - EnemyShield
   layers:
   - Default
   - TransparentFX

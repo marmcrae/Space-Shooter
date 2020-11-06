@@ -22,12 +22,12 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject[] _enemies;
 
-    private int _maxEnemies = 5;
+    private int _maxEnemies = 4;
     private int _enemyInstantiationCount = 0;
     public int _enemyCount = 0;
     private int _waveNumber = 0;
 
-    private float _waveCoolDown = 10f;
+    private float _waveCoolDown = 1f;
     private bool _stopSpawning = false;
 
     private UIManager _uiManager;
@@ -52,18 +52,18 @@ public class SpawnManager : MonoBehaviour
     
             while (_stopSpawning == false && (_enemyInstantiationCount <= _maxEnemies))
             { 
-                    Instantiate(_enemies[Random.Range(0, 1)], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                    Instantiate(_enemies[Random.Range(0, 2)], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
                     _enemyInstantiationCount += 1;
                     _enemyCount += 1;
-                    Debug.Log("In Loop SM53. EnemyInstantiation: " + _enemyInstantiationCount + " Enemy Count: " + _enemyCount);
+                    Debug.Log("In Loop  EnemyInstantiation: " + _enemyInstantiationCount + " Enemy Count: " + _enemyCount);
                     yield return new WaitForSeconds(_spawnWaitTime);             
             }
 
-           _enemyInstantiationCount = 0;
+            _enemyInstantiationCount = 0;
             
-            Debug.Log("LINE 56 SM. Out of loop. Enemy count : " + _enemyCount + " Wave Count: " + _waveNumber);
+            Debug.Log(" Out of loop. Enemy count : " + _enemyCount + " Wave Count: " + _waveNumber);
          
-                _maxEnemies += 5;
+            _maxEnemies += 5;
 
             if (_enemyCount == 0) 
             {
@@ -71,11 +71,11 @@ public class SpawnManager : MonoBehaviour
                 _uiManager.UpdateLevel(_waveNumber);
             }
               
-            Debug.Log("LINE 64 SM. After enemy count 0. Enemy count: " + _enemyCount +  "Max Enemy count : " + _maxEnemies + " Wave Count: " + _waveNumber);
+            Debug.Log("After Enemy Count == 0. Enemy count: " + _enemyCount +  "Max Enemy count : " + _maxEnemies + " Wave Count: " + _waveNumber);
 
             _stopSpawning = true;
 
-           // yield return null;
+           yield return null;
         }
     }
 
@@ -86,33 +86,35 @@ public class SpawnManager : MonoBehaviour
     }
  
 
-    IEnumerator SpawnPowerUpRoutine()
+   IEnumerator SpawnPowerUpRoutine()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(.5f);
 
         while (_stopSpawning == false)
         {
-            int randomPowerUp = Random.Range(0, 7);
+           int randomPowerUp = Random.Range(0, 7);
+            Debug.Log("Spawn PwerUp");
+            
 
-            if (randomPowerUp == 6)
-            //6 = super laser
-            {
-                Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+        //    if (randomPowerUp == 6)
+        //    //6 = super laser
+        //    {
+               //Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
                
-            }
-            else if (randomPowerUp == 5)
-            //5 = Ammo Boost
-            {
+        //    }
+        //    else if (randomPowerUp == 5)
+        //    //5 = Ammo Boost
+        //    {
+        //        Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+        //        // yield return new WaitForSeconds(4f);
+        //    }
+        //    else
+        //    {
                 Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-                // yield return new WaitForSeconds(4f);
-            }
-            else
-            {
-                Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-                // yield return new WaitForSeconds(Random.Range(1.0f, 8.0f));
-            }
-        }
-    }
+                yield return new WaitForSeconds(Random.Range(1.0f, 8.0f));
+         }
+      }
+   // }
 
 
     public void OnPlayerDeath()

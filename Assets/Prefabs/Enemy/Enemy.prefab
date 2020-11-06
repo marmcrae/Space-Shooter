@@ -58,6 +58,9 @@ MonoBehaviour:
   _frequency: 1
   _magnitude: 15
   _speed: 5
+  _bossFrequency: 1
+  _bossMagnitude: 15
+  _bossSpeed: 5
   _isEnemyShieldActive: 0
 --- !u!212 &8606444011698527035
 SpriteRenderer:
@@ -370,7 +373,7 @@ PrefabInstance:
     - target: {fileID: 5025301637026073643, guid: 35dd8f8a7c8fc6d4dbfec76bdc84eb86,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5025301637026073643, guid: 35dd8f8a7c8fc6d4dbfec76bdc84eb86,
         type: 3}

@@ -26,12 +26,24 @@ public class Enemy : MonoBehaviour
     private float _speed = 5.0f;
 
     [SerializeField]
+    private float _bossFrequency = 1.0f;
+
+    [SerializeField]
+    private float _bossMagnitude = 15.0f;
+
+    [SerializeField]
+    private float _bossSpeed = 5.0f;
+
+    [SerializeField]
     private bool _isEnemyShieldActive = false;
 
     private float _canFire = -1;
+    private int _bossLives = 15;
+
     private Player _player;
     private Animator _animator;
     private SpawnManager _spawnManager;
+    private ShakeBehavior _shakeBehavior;
 
     Vector3 position = new Vector3();
     Vector3 pos;
@@ -42,6 +54,7 @@ public class Enemy : MonoBehaviour
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _shakeBehavior = GameObject.Find("Main Camera").GetComponent<ShakeBehavior>();
 
         if (_player == null)
         {
@@ -58,6 +71,10 @@ public class Enemy : MonoBehaviour
         if (_spawnManager == null)
         {
             Debug.LogError("Spawn Manager is NULL");
+        }
+        if (_shakeBehavior == null)
+        {
+            Debug.LogError("Main Camera Shake behavior is NULL");
         }
 
         pos = transform.position;
@@ -126,6 +143,31 @@ public class Enemy : MonoBehaviour
             }
         }
 
+        else if (tag == "BossEnemy")
+        {
+            _fireRate = 15f;
+            float randoX = Random.Range(-8, 8);
+            float randoY = Random.Range(4, 6);
+            position = new Vector3(randoX, randoY, 0);
+
+            StartCoroutine(BossTransport());
+
+            IEnumerator BossTransport()
+            { 
+                yield return new WaitForSeconds(2f);
+                transform.position = Vector3.Lerp(position, position, 6);
+            }
+            
+
+            if (transform.position.y < -5.5f)
+            {
+                float xRandom = Random.Range(-8, 8);
+                pos = new Vector3(xRandom, 7f, 0);
+                transform.Translate(Vector3.down * Time.deltaTime * _bossSpeed);
+                transform.position = pos * Mathf.Sin(Time.time * _bossFrequency) *_bossMagnitude;
+            }
+        }
+
         else if (tag == "AggressiveEnemy")
         { 
             transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
@@ -150,7 +192,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "Player" )
+        if(other.tag == "Player"  && tag != "BossEnemy")
 
         {
             if (_player != null)
@@ -171,10 +213,46 @@ public class Enemy : MonoBehaviour
             Destroy(other.gameObject);
         }
 
-        if (other.tag == "Laser" )
+        if( tag == "BossEnemy" && other.tag == "Player" || other.tag == "Laser")
+        {
+            _shakeBehavior.TriggerShake();
+            _bossLives--;
+            Debug.Log("Boss Lives: " + _bossLives);
+            _player.AddPoints(10);
+            //StartCoroutine(BossDamageFlicker());
+
+            //IEnumerator BossDamageFlicker()
+            //{
+            //    while (true)
+            //    {
+            //        Debug.Log("flicker - false");
+            //        this.gameObject.SetActive(false);
+            //        yield return new WaitForSeconds(0.5f);
+            //        Debug.Log("flicker - false");
+            //        this.gameObject.SetActive(true);
+            //        yield return new WaitForSeconds(0.5f);
+            //        Debug.Log("flicker - true");
+            //        this.gameObject.SetActive(false);
+            //        yield return new WaitForSeconds(0.5f);
+            //        Debug.Log("flicker - false");
+            //        this.gameObject.SetActive(true);
+            //    }      
+            //}
+
+
+            if (_bossLives == 0 && _player != null)
+            {
+                Destroy(this.gameObject, 1.5f);
+                _enemySpeed = 0f;
+                _frequency = 0f;
+                _animator.SetTrigger("OnEnemyDeath");
+            }
+        }
+
+        if (other.tag == "Laser" && tag != "BossEnemy" )
         {
       
-        Destroy(other.gameObject);
+         Destroy(other.gameObject);
 
             if (_player != null)
             {

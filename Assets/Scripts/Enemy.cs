@@ -37,6 +37,9 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private bool _isEnemyShieldActive = false;
 
+    [SerializeField]
+    private bool _bossTransportActive = false;
+
     private float _canFire = -1;
     private int _bossLives = 15;
 
@@ -107,12 +110,10 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void EnemyShield()
+    public void EnemyShield()
     {
-        //need to create in spawnManager random iteration of shields. 
-        //_isEnemyShieldActive = false;
-        //_enemyShieldSprite.gameObject.SetActive(false);
-
+        _isEnemyShieldActive = true;
+        _enemyShieldSprite.gameObject.SetActive(true);
     }
 
 
@@ -143,6 +144,7 @@ public class Enemy : MonoBehaviour
             }
         }
 
+
         else if (tag == "BossEnemy")
         {
             _fireRate = 15f;
@@ -150,23 +152,13 @@ public class Enemy : MonoBehaviour
             float randoY = Random.Range(4, 6);
             position = new Vector3(randoX, randoY, 0);
 
-            StartCoroutine(BossTransport());
-
-            IEnumerator BossTransport()
-            { 
-                yield return new WaitForSeconds(2f);
-                transform.position = Vector3.Lerp(position, position, 6);
-            }
-            
-
-            if (transform.position.y < -5.5f)
+            if(_bossTransportActive == false)
             {
-                float xRandom = Random.Range(-8, 8);
-                pos = new Vector3(xRandom, 7f, 0);
-                transform.Translate(Vector3.down * Time.deltaTime * _bossSpeed);
-                transform.position = pos * Mathf.Sin(Time.time * _bossFrequency) *_bossMagnitude;
+                StartCoroutine(BossTransport());
+                _bossTransportActive = true;
             }
         }
+
 
         else if (tag == "AggressiveEnemy")
         { 
@@ -187,6 +179,14 @@ public class Enemy : MonoBehaviour
                 transform.position = new Vector3(xRandom, 7f, 0);
             }
         }
+    }
+
+
+    IEnumerator BossTransport()
+    {
+        yield return new WaitForSeconds(2f);
+        transform.position = Vector3.Lerp(position, position, 6);
+        _bossTransportActive = false;
     }
 
 
@@ -269,7 +269,7 @@ public class Enemy : MonoBehaviour
         
         if (tag == "EnemyShield")
         {
-            //_isEnemyShieldActive = false;
+            _isEnemyShieldActive = false;
             Debug.Log("EnemyShield tag method called");
             _enemyShieldSprite.gameObject.SetActive(false);
         }

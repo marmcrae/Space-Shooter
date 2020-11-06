@@ -53,8 +53,7 @@ MonoBehaviour:
   _fireRate: 0
   _laserPrefab: {fileID: 2277915025424067856, guid: 9471b2f7601f70b4b8f2dac0913c6bf1,
     type: 3}
-  _enemyShieldSprite: {fileID: 5025301637026073643, guid: 35dd8f8a7c8fc6d4dbfec76bdc84eb86,
-    type: 3}
+  _enemyShieldSprite: {fileID: 2286643492963838743}
   _frequency: 1
   _magnitude: 15
   _speed: 5
@@ -382,6 +381,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35dd8f8a7c8fc6d4dbfec76bdc84eb86, type: 3}
+--- !u!1 &2286643492963838743 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5025301637026073643, guid: 35dd8f8a7c8fc6d4dbfec76bdc84eb86,
+    type: 3}
+  m_PrefabInstance: {fileID: 6487082401367435068}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6201874910336448860 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 871379791858851424, guid: 35dd8f8a7c8fc6d4dbfec76bdc84eb86,

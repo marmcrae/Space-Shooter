@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
     private int _score = 0;
 
     [SerializeField]
-    private int _ammo = 15;
+    private int _ammo = 50;
 
     [SerializeField]
     private GameObject _laserPrefab;
@@ -282,7 +282,7 @@ public class Player : MonoBehaviour
     public void AmmoBoost()
     {
         _isAmmoBoostActive = true;
-        _ammo = 15;
+        _ammo = 50;
         _uiManager.UpdateAmmo(_ammo);
     }
 

@@ -92,17 +92,17 @@ public class UIManager : MonoBehaviour
     }
 
     public void UpdateLevel(int waveCount)
-    {
-        
+    {    
         _levelText.text = "LEVEL " + waveCount.ToString() + " CLEARED!";
         _levelText.gameObject.SetActive(true);
 
         StartCoroutine(UpdateLevelCoroutine());
+    }
 
-        IEnumerator UpdateLevelCoroutine()
-        {
-            yield return new WaitForSeconds(2f);
-        }
+    IEnumerator UpdateLevelCoroutine()
+    {
+        yield return new WaitForSeconds(2f);
+        _levelText.gameObject.SetActive(false);
     }
 
 

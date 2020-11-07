@@ -573,6 +573,75 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1001 &262481315
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3000064893744366319, guid: dca879451da72b845b1b03a6731a9a23,
+        type: 3}
+      propertyPath: m_Name
+      value: Boss_Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 4391964644830548740, guid: dca879451da72b845b1b03a6731a9a23,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4391964644830548740, guid: dca879451da72b845b1b03a6731a9a23,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 21.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4391964644830548740, guid: dca879451da72b845b1b03a6731a9a23,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4391964644830548740, guid: dca879451da72b845b1b03a6731a9a23,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4391964644830548740, guid: dca879451da72b845b1b03a6731a9a23,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4391964644830548740, guid: dca879451da72b845b1b03a6731a9a23,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4391964644830548740, guid: dca879451da72b845b1b03a6731a9a23,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4391964644830548740, guid: dca879451da72b845b1b03a6731a9a23,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4391964644830548740, guid: dca879451da72b845b1b03a6731a9a23,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4391964644830548740, guid: dca879451da72b845b1b03a6731a9a23,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4391964644830548740, guid: dca879451da72b845b1b03a6731a9a23,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: dca879451da72b845b1b03a6731a9a23, type: 3}
 --- !u!1 &365914996
 GameObject:
   m_ObjectHideFlags: 0
@@ -903,12 +972,12 @@ PrefabInstance:
     - target: {fileID: 178054035550356682, guid: 66e5b18e90834e6469893be5e4feca13,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.7
+      value: 4.6
       objectReference: {fileID: 0}
     - target: {fileID: 178054035550356682, guid: 66e5b18e90834e6469893be5e4feca13,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.6
+      value: 7.5
       objectReference: {fileID: 0}
     - target: {fileID: 178054035550356682, guid: 66e5b18e90834e6469893be5e4feca13,
         type: 3}
@@ -1115,10 +1184,10 @@ MonoBehaviour:
   _speed: 5
   _speedBoost: 1.7
   _fireRate: 0.15
-  _lives: 3
+  _lives: 1000
   _shieldsRemaining: 0
   _score: 0
-  _ammo: 15
+  _ammo: 1000
   _laserPrefab: {fileID: 7721021695494788945, guid: 6f5bc5f650d849c478bee1f906d76f7c,
     type: 3}
   _superLaserPrefab: {fileID: 2020063937209140646, guid: d1080ce05491b094eb77ec53f2499a85,
@@ -1554,7 +1623,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'MAX AMMO: 15'
+  m_Text: 'MAX AMMO: 1000'
 --- !u!222 &1135628394
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2553,7 +2622,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'CURRENT AMMO: 15'
+  m_Text: 'CURRENT AMMO: 1000'
 --- !u!222 &1859258351
 CanvasRenderer:
   m_ObjectHideFlags: 0

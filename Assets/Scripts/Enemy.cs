@@ -40,6 +40,9 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private bool _bossTransportActive = false;
 
+    [SerializeField]
+    private bool _bossFlickerActive = false;
+
     private float _canFire = -1;
     private int _bossLives = 15;
 
@@ -110,12 +113,6 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void EnemyShield()
-    {
-        _isEnemyShieldActive = true;
-        _enemyShieldSprite.gameObject.SetActive(true);
-    }
-
 
     void EnemyBehavior()
     { 
@@ -129,7 +126,9 @@ public class Enemy : MonoBehaviour
             {
                 transform.position = new Vector3(xRandom, 7f, 0);
             }          
-        }    
+        }  
+        
+
         else if(tag == "GreenEnemy")
         {
             pos += Vector3.down * Time.deltaTime * _speed;
@@ -145,21 +144,6 @@ public class Enemy : MonoBehaviour
         }
 
 
-        else if (tag == "BossEnemy")
-        {
-            _fireRate = 15f;
-            float randoX = Random.Range(-8, 8);
-            float randoY = Random.Range(4, 6);
-            position = new Vector3(randoX, randoY, 0);
-
-            if(_bossTransportActive == false)
-            {
-                StartCoroutine(BossTransport());
-                _bossTransportActive = true;
-            }
-        }
-
-
         else if (tag == "AggressiveEnemy")
         { 
             transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
@@ -168,8 +152,7 @@ public class Enemy : MonoBehaviour
 
             if (_strikingDistance <= 5f)
             {
-         
-                Vector3.MoveTowards(_player.transform.position, this.gameObject.transform.position, 10f * Time.deltaTime);
+              Vector3.MoveTowards(_player.transform.position, this.gameObject.transform.position, 10f * Time.deltaTime);
             }
 
             float xRandom = Random.Range(-8, 8);
@@ -179,14 +162,35 @@ public class Enemy : MonoBehaviour
                 transform.position = new Vector3(xRandom, 7f, 0);
             }
         }
+
+
+        else if (tag == "BossEnemy")
+        {
+            float randoX = Random.Range(-8, 8);
+            float randoY = Random.Range(3, 5);
+            position = new Vector3(randoX, randoY, 0);
+
+            if (_bossTransportActive == false)
+            {
+                StartCoroutine(BossTransport());
+                _bossTransportActive = true;
+            }
+        }
     }
 
 
     IEnumerator BossTransport()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(.25f);
         transform.position = Vector3.Lerp(position, position, 6);
         _bossTransportActive = false;
+    }
+
+
+    public void EnemyShield()
+    {
+        _isEnemyShieldActive = true;
+        _enemyShieldSprite.gameObject.SetActive(true);
     }
 
 
@@ -207,49 +211,15 @@ public class Enemy : MonoBehaviour
             _animator.SetTrigger("OnEnemyDeath");
         }
 
+
         if (other.tag == "PowerUp")
         {
             //need to upgrade to smart ai
             Destroy(other.gameObject);
         }
 
-        if( tag == "BossEnemy" && other.tag == "Player" || other.tag == "Laser")
-        {
-            _shakeBehavior.TriggerShake();
-            _bossLives--;
-            Debug.Log("Boss Lives: " + _bossLives);
-            _player.AddPoints(10);
-            //StartCoroutine(BossDamageFlicker());
 
-            //IEnumerator BossDamageFlicker()
-            //{
-            //    while (true)
-            //    {
-            //        Debug.Log("flicker - false");
-            //        this.gameObject.SetActive(false);
-            //        yield return new WaitForSeconds(0.5f);
-            //        Debug.Log("flicker - false");
-            //        this.gameObject.SetActive(true);
-            //        yield return new WaitForSeconds(0.5f);
-            //        Debug.Log("flicker - true");
-            //        this.gameObject.SetActive(false);
-            //        yield return new WaitForSeconds(0.5f);
-            //        Debug.Log("flicker - false");
-            //        this.gameObject.SetActive(true);
-            //    }      
-            //}
-
-
-            if (_bossLives == 0 && _player != null)
-            {
-                Destroy(this.gameObject, 1.5f);
-                _enemySpeed = 0f;
-                _frequency = 0f;
-                _animator.SetTrigger("OnEnemyDeath");
-            }
-        }
-
-        if (other.tag == "Laser" && tag != "BossEnemy" )
+        if (other.tag == "Laser" && tag != "BossEnemy" && _isEnemyShieldActive == false)
         {
       
          Destroy(other.gameObject);
@@ -265,13 +235,54 @@ public class Enemy : MonoBehaviour
             }
 
             Destroy(GetComponent<Collider2D>());
-        } 
-        
-        if (tag == "EnemyShield")
+        }
+
+
+        if ((other.tag == "Laser" || other.tag == "Player") && tag == "EnemyShield" && _isEnemyShieldActive == true)
         {
+            Destroy(other.gameObject);
             _isEnemyShieldActive = false;
-            Debug.Log("EnemyShield tag method called");
             _enemyShieldSprite.gameObject.SetActive(false);
+            _player.AddPoints(10);
+            Debug.Log("EnemyShield behavior called");
+        }
+
+        if (tag == "BossEnemy" && (other.tag == "Player" || other.tag == "Laser"))
+        {
+            _shakeBehavior.TriggerShake();
+            _bossLives--;
+            Debug.Log("Boss Lives: " + _bossLives);
+            _player.AddPoints(10);
+
+            //if(_bossFlickerActive == false)
+            //{
+            //    StartCoroutine(BossDamageFlicker());
+            //    _bossTransportActive = true;
+            //}
+           
+            if (_bossLives == 0 && _player != null)
+            {
+                Destroy(this.gameObject, 1.5f);
+                _enemySpeed = 0f;
+                _frequency = 0f;
+                _animator.SetTrigger("OnEnemyDeath");
+            }
         }
     }
+
+
+    //IEnumerator BossDamageFlicker()
+    //{
+    //    while (true)
+    //    {
+    //        gameObject.SetActive(false);
+    //        Debug.Log("bossFlicker game object false");
+    //        yield return new WaitForSeconds(0.5f);
+    //        gameObject.SetActive(true);
+    //        Debug.Log("bossFlicker game object true");
+          
+    //        _bossFlickerActive = false;
+    //    }
+          
+    //}
 }

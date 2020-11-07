@@ -61,6 +61,8 @@ MonoBehaviour:
   _bossMagnitude: 15
   _bossSpeed: 5
   _isEnemyShieldActive: 0
+  _bossTransportActive: 0
+  _bossFlickerActive: 0
 --- !u!212 &8606444011698527035
 SpriteRenderer:
   m_ObjectHideFlags: 0

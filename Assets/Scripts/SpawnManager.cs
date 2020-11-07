@@ -5,10 +5,7 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField]
-    private GameObject _enemyPrefab;
-
-    [SerializeField]
-    private GameObject _enemyZigZagPrefab;
+    private GameObject _bossEnemyPrefab;
 
     [SerializeField]
     private GameObject _enemyContainer;
@@ -22,18 +19,17 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject[] _enemies;
 
-
-
-    private int _maxEnemies = 4;
+    private int _maxEnemies = 1;
     private int _enemyInstantiationCount = 0;
     public int _enemyCount = 0;
-    private int _waveNumber = 0;
+    private int _waveNumber = 1;
 
     private float _waveCoolDown = 1f;
     private bool _stopSpawning = false;
 
     private UIManager _uiManager;
     private GameObject _enemy;
+    private GameObject _bossEnemy;
 
     
     // Start is called before the first frame update
@@ -41,68 +37,73 @@ public class SpawnManager : MonoBehaviour
     {
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         
-
         if(_uiManager == null)
         {
             Debug.Log("UI Manager is NULL");
         }
-  
     }
 
-    IEnumerator SpawnEnemyWaves()
-    {
-        while (_waveNumber < 5) // 5th = boss wave
-        {
-            yield return new WaitForSeconds(_waveCoolDown);
-    
-            while (_stopSpawning == false && _enemyInstantiationCount <= _maxEnemies)
-            { 
-                    _enemy= Instantiate(_enemies[Random.Range(0, 2)], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-                    _enemyInstantiationCount += 1;
-                    _enemyCount += 1;
-
-                int randomNum = Random.Range(1, 4);
-                    if (randomNum == 1)
-                    {
-                        _enemy.GetComponent<Enemy>().EnemyShield();
-                    }
-
-                    Debug.Log("In Loop  EnemyInstantiation: " + _enemyInstantiationCount + " Enemy Count: " + _enemyCount);
-                    yield return new WaitForSeconds(_spawnWaitTime);             
-            }
-
-            _stopSpawning = true;
-            _enemyInstantiationCount = 0;
-            
-            Debug.Log(" Out of loop. Enemy count : " + _enemyCount + " Wave Count: " + _waveNumber);
-         
-            _maxEnemies += 5;
-
-            if (_enemyCount == 0) 
-            {
-                _waveNumber += 1;
-                _uiManager.UpdateLevel(_waveNumber);
-                _stopSpawning = false;
-
-                yield return new WaitForSeconds(3f);
-
-            }
-              
-            Debug.Log("After Enemy Count == 0. Enemy count: " + _enemyCount +  "Max Enemy count : " + _maxEnemies + " Wave Count: " + _waveNumber);
-
-
-           yield return null;
-        }
-    }
 
     public void ActivateSpawn()
     {
         StartCoroutine(SpawnEnemyWaves());
         StartCoroutine(SpawnPowerUpRoutine());
     }
- 
 
-   IEnumerator SpawnPowerUpRoutine()
+
+    IEnumerator SpawnEnemyWaves()
+    {
+        while (_waveNumber < 5) // 5th = boss wave
+        {
+            yield return new WaitForSeconds(_waveCoolDown);
+
+            while (_stopSpawning == false && _enemyInstantiationCount <= _maxEnemies)
+            {
+                _enemy = Instantiate(_enemies[Random.Range(0, 2)], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                _enemyInstantiationCount += 1;
+                _enemyCount += 1;
+
+                int randomNum = Random.Range(1, 4);
+                if (randomNum == 1)
+                {
+                    _enemy.GetComponent<Enemy>().EnemyShield();
+                }
+
+                yield return new WaitForSeconds(_spawnWaitTime);
+            }
+
+            Debug.Log("Out of while loop. Enemy Inst: " + _enemyInstantiationCount + " Enemy Count: " + _enemyCount + " Wave Count: " + _waveNumber);
+
+
+
+            _stopSpawning = true;
+            _enemyInstantiationCount = 0;
+
+            if (_enemyCount <= 0)
+            {
+                _enemyCount = 0;
+                _uiManager.UpdateLevel(_waveNumber);
+                _waveNumber += 1;
+                _stopSpawning = false;
+                Debug.Log("Enemy == 0. Enemy Inst: " + _enemyInstantiationCount + " Enemy Count: " + _enemyCount + " Wave Count: " + _waveNumber);
+
+                yield return new WaitForSeconds(3f);
+            }
+
+            _maxEnemies += 5;
+            Debug.Log("After Max Enemy upped. Enemy Inst: " + _enemyInstantiationCount + " Enemy Count: " + _enemyCount + " Wave Count: " + _waveNumber + "Max Enemies: " + _maxEnemies);
+
+            yield return null;
+        }
+
+        if(_waveNumber == 5)
+        {
+            BossWave();
+        }
+    }
+
+
+    IEnumerator SpawnPowerUpRoutine()
     {
         yield return new WaitForSeconds(.5f);
 
@@ -129,6 +130,12 @@ public class SpawnManager : MonoBehaviour
             }
             yield return null;
         }
+    }
+
+    void BossWave()
+    {
+       _bossEnemy = Instantiate(_bossEnemyPrefab, new Vector3(-1f, 1.4f, 0), Quaternion.identity);
+       
     }
 
 

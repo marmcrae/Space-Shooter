@@ -21,7 +21,8 @@ public class SpawnManager : MonoBehaviour
 
     private int _maxEnemies = 1;
     private int _enemyInstantiationCount = 0;
-    public int _enemyCount = 0;
+    public int enemyCount = 0;
+    public int bossEnemyCount = 0;
     private int _waveNumber = 1;
 
     private float _waveCoolDown = 1f;
@@ -43,6 +44,12 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+  
+
+    }
+
 
     public void ActivateSpawn()
     {
@@ -61,7 +68,7 @@ public class SpawnManager : MonoBehaviour
             {
                 _enemy = Instantiate(_enemies[Random.Range(0, 2)], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
                 _enemyInstantiationCount += 1;
-                _enemyCount += 1;
+                enemyCount += 1;
 
                 int randomNum = Random.Range(1, 4);
                 if (randomNum == 1)
@@ -71,27 +78,26 @@ public class SpawnManager : MonoBehaviour
 
                 yield return new WaitForSeconds(_spawnWaitTime);
             }
-
-            Debug.Log("Out of while loop. Enemy Inst: " + _enemyInstantiationCount + " Enemy Count: " + _enemyCount + " Wave Count: " + _waveNumber);
-
+            Debug.Log("Out of while loop. Enemy Inst: " + _enemyInstantiationCount + " Enemy Count: " + enemyCount + " Wave Count: " + _waveNumber);
 
 
             _stopSpawning = true;
             _enemyInstantiationCount = 0;
 
-            if (_enemyCount <= 0)
+            if (enemyCount <= 0)
             {
-                _enemyCount = 0;
+                enemyCount = 0;
                 _uiManager.UpdateLevel(_waveNumber);
                 _waveNumber += 1;
+                _maxEnemies += 4;
                 _stopSpawning = false;
-                Debug.Log("Enemy == 0. Enemy Inst: " + _enemyInstantiationCount + " Enemy Count: " + _enemyCount + " Wave Count: " + _waveNumber);
+                Debug.Log("Enemy == 0. Enemy Inst: " + _enemyInstantiationCount + " Enemy Count: " + enemyCount + " Wave Count: " + _waveNumber);
 
                 yield return new WaitForSeconds(3f);
             }
 
-            _maxEnemies += 5;
-            Debug.Log("After Max Enemy upped. Enemy Inst: " + _enemyInstantiationCount + " Enemy Count: " + _enemyCount + " Wave Count: " + _waveNumber + "Max Enemies: " + _maxEnemies);
+            
+            Debug.Log("After Max Enemy upped. Enemy Inst: " + _enemyInstantiationCount + " Enemy Count: " + enemyCount + " Wave Count: " + _waveNumber + "Max Enemies: " + _maxEnemies);
 
             yield return null;
         }
@@ -105,37 +111,43 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnPowerUpRoutine()
     {
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(3f);
 
         while (_stopSpawning == false)
         {
-            int randomPowerUp = Random.Range(0, 7);       
+            int randomPowerUp = Random.Range(0, 101);       
 
-            if (randomPowerUp == 6)
+            if (randomPowerUp < 15 )
             //6 = super laser
             {
-                Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                Instantiate(_powerUp[6], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
 
             }
-            else if (randomPowerUp == 5)
+            else if (randomPowerUp < 70 && randomPowerUp > 15)
             //5 = Ammo Boost
             {
-                Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-                // yield return new WaitForSeconds(4f);
+                Instantiate(_powerUp[5], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
             }
             else
             {
-                Instantiate(_powerUp[randomPowerUp], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                Instantiate(_powerUp[Random.Range(0 , 5)], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
                 yield return new WaitForSeconds(Random.Range(1.0f, 8.0f));
             }
             yield return null;
         }
     }
 
+
     void BossWave()
+    {     
+        _bossEnemy = Instantiate(_bossEnemyPrefab, new Vector3(-1f, 1.4f, 0), Quaternion.identity);
+        StartCoroutine(BossWaveWait());
+    }
+
+
+    IEnumerator BossWaveWait()
     {
-       _bossEnemy = Instantiate(_bossEnemyPrefab, new Vector3(-1f, 1.4f, 0), Quaternion.identity);
-       
+        yield return new WaitForSeconds(5f);     
     }
 
 

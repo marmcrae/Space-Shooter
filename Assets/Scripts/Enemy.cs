@@ -32,7 +32,7 @@ public class Enemy : MonoBehaviour
     private float _bossMagnitude = 15.0f;
 
     [SerializeField]
-    private float _bossSpeed = 5.0f;
+    public float _bossSpeed = 5.0f;
 
     [SerializeField]
     private bool _isEnemyShieldActive = false;
@@ -44,12 +44,14 @@ public class Enemy : MonoBehaviour
     private bool _bossFlickerActive = false;
 
     private float _canFire = -1;
-    private int _bossLives = 15;
+    private int _bossLives = 20;
+        
 
     private Player _player;
     private Animator _animator;
     private SpawnManager _spawnManager;
     private ShakeBehavior _shakeBehavior;
+    private UIManager _uiManager;
 
     Vector3 position = new Vector3();
     Vector3 pos;
@@ -61,6 +63,12 @@ public class Enemy : MonoBehaviour
         _player = GameObject.Find("Player").GetComponent<Player>();
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _shakeBehavior = GameObject.Find("Main Camera").GetComponent<ShakeBehavior>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+
+        if (_uiManager == null)
+        {
+            Debug.Log("UI Manager is NULL");
+        }
 
         if (_player == null)
         {
@@ -181,7 +189,7 @@ public class Enemy : MonoBehaviour
 
     IEnumerator BossTransport()
     {
-        yield return new WaitForSeconds(.25f);
+        yield return new WaitForSeconds(.20f);
         transform.position = Vector3.Lerp(position, position, 6);
         _bossTransportActive = false;
     }
@@ -205,17 +213,10 @@ public class Enemy : MonoBehaviour
             }
 
             Destroy(this.gameObject, 2.3f);
-            _spawnManager._enemyCount--;
+            _spawnManager.enemyCount--;
             _enemySpeed = 0f;
             _frequency = 0f;
             _animator.SetTrigger("OnEnemyDeath");
-        }
-
-
-        if (other.tag == "PowerUp")
-        {
-            //need to upgrade to smart ai
-            Destroy(other.gameObject);
         }
 
 
@@ -227,7 +228,7 @@ public class Enemy : MonoBehaviour
             if (_player != null)
             {
                 Destroy(this.gameObject, 1.5f);
-                _spawnManager._enemyCount--;
+                _spawnManager.enemyCount--;
                 _player.AddPoints(10);
                 _enemySpeed = 0f;
                 _frequency = 0f;
@@ -238,34 +239,33 @@ public class Enemy : MonoBehaviour
         }
 
 
-        if ((other.tag == "Laser" || other.tag == "Player") && tag == "EnemyShield" && _isEnemyShieldActive == true)
+        if (other.tag == "Laser" || other.tag == "Player" && tag == "EnemyShield" && _isEnemyShieldActive == true)
         {
             Destroy(other.gameObject);
             _isEnemyShieldActive = false;
             _enemyShieldSprite.gameObject.SetActive(false);
             _player.AddPoints(10);
-            Debug.Log("EnemyShield behavior called");
         }
 
-        if (tag == "BossEnemy" && (other.tag == "Player" || other.tag == "Laser"))
+        if (tag == "BossEnemy" && other.tag == "Player" || other.tag == "Laser")
         {
             _shakeBehavior.TriggerShake();
             _bossLives--;
-            Debug.Log("Boss Lives: " + _bossLives);
             _player.AddPoints(10);
 
-            //if(_bossFlickerActive == false)
+            //if (_bossFlickerActive == false)
             //{
             //    StartCoroutine(BossDamageFlicker());
             //    _bossTransportActive = true;
             //}
-           
+
             if (_bossLives == 0 && _player != null)
             {
+                _animator.SetTrigger("OnEnemyDeath");
                 Destroy(this.gameObject, 1.5f);
                 _enemySpeed = 0f;
                 _frequency = 0f;
-                _animator.SetTrigger("OnEnemyDeath");
+                _uiManager.WinnerText();
             }
         }
     }
@@ -280,9 +280,9 @@ public class Enemy : MonoBehaviour
     //        yield return new WaitForSeconds(0.5f);
     //        gameObject.SetActive(true);
     //        Debug.Log("bossFlicker game object true");
-          
+
     //        _bossFlickerActive = false;
     //    }
-          
+
     //}
 }

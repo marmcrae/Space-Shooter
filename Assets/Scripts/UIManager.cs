@@ -98,10 +98,23 @@ public class UIManager : MonoBehaviour
 
         StartCoroutine(UpdateLevelCoroutine());
     }
-
     IEnumerator UpdateLevelCoroutine()
     {
         yield return new WaitForSeconds(2f);
+        _levelText.gameObject.SetActive(false);
+    }
+
+
+    public void WinnerText()
+    {
+        _levelText.text = "YOU WIN!!";
+        _levelText.gameObject.SetActive(true);
+        StartCoroutine(UpdateWinnerCoroutine());
+        GameOverSequence();
+    }
+    IEnumerator UpdateWinnerCoroutine()
+    {
+        yield return new WaitForSeconds(10f);
         _levelText.gameObject.SetActive(false);
     }
 

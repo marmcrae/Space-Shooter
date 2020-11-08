@@ -39,6 +39,11 @@ public class TriplePowerUp : MonoBehaviour
 
         AudioSource.PlayClipAtPoint(_powerClip, transform.position);
 
+        if (other.tag == "EnemyLaser")
+        {
+            Destroy(this.gameObject);
+        }
+
         if(player != null)
         {
           

@@ -41,6 +41,6 @@ public class ShakeBehavior : MonoBehaviour
 
     public void TriggerShake()
     {
-        shakeDuration = .5f;
+        shakeDuration = .20f;
     }
 }

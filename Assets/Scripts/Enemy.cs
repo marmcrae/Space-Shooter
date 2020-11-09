@@ -58,6 +58,21 @@ public class Enemy : MonoBehaviour
     Vector3 axis;
 
 
+    /**************AGGRESSIVE ENEMY*****************/
+
+    public float aggEnemyMinRot = 80.0f;
+    public float aggEnemyMaxRot = 120.0f;
+    public float aggMinMoveSpeed = 1.75f;
+    public float aggMaxMoveSpeed = 2.25f;
+    [SerializeField]
+    private float rotationSpeed = 75.0f; // Degrees per second
+    [SerializeField]
+    private float movementSpeed = 2.0f; // Units per second;
+    private Transform target;
+    private Quaternion quaternion;
+
+
+
     private void Start()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
@@ -93,6 +108,12 @@ public class Enemy : MonoBehaviour
 
         pos = transform.position;
         axis = transform.right;
+
+
+        /**************Agg Enemy********************/
+        target = GameObject.Find("Player").transform;
+        rotationSpeed = Random.Range(aggEnemyMinRot, aggEnemyMaxRot);
+        movementSpeed = Random.Range(aggMinMoveSpeed, aggMaxMoveSpeed);
     }
 
 
@@ -153,27 +174,19 @@ public class Enemy : MonoBehaviour
 
 
         else if (tag == "AggressiveEnemy")
-        { 
-            transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
-            var _aggressiveEnemyPos = this.gameObject.transform.position;
-            float _strikingDistance = Vector3.Distance(_aggressiveEnemyPos, _player.transform.position);
+        {
 
-            if (_strikingDistance <= 5f)
-            {
-              Vector3.MoveTowards(_player.transform.position, this.gameObject.transform.position, 10f * Time.deltaTime);
-            }
-
-            float xRandom = Random.Range(-8, 8);
-
-            if (transform.position.y < -5.5f)
-            {
-                transform.position = new Vector3(xRandom, 7f, 0);
-            }
+            Vector3 v3 = target.position - transform.position;
+            float angle = Mathf.Atan2(v3.y, v3.x) * Mathf.Rad2Deg;
+            quaternion = Quaternion.AngleAxis(angle, Vector3.forward);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, quaternion, rotationSpeed * Time.deltaTime);
+            transform.Translate(Vector3.right * movementSpeed * Time.deltaTime);
         }
 
 
         else if (tag == "BossEnemy")
         {
+            transform.Translate(-1f, 1.4f, 0);
             float randoX = Random.Range(-8, 8);
             float randoY = Random.Range(3, 5);
             position = new Vector3(randoX, randoY, 0);
@@ -189,7 +202,7 @@ public class Enemy : MonoBehaviour
 
     IEnumerator BossTransport()
     {
-        yield return new WaitForSeconds(.20f);
+        yield return new WaitForSeconds(.25f);
         transform.position = Vector3.Lerp(position, position, 6);
         _bossTransportActive = false;
     }
@@ -253,36 +266,16 @@ public class Enemy : MonoBehaviour
             _bossLives--;
             _player.AddPoints(10);
 
-            //if (_bossFlickerActive == false)
-            //{
-            //    StartCoroutine(BossDamageFlicker());
-            //    _bossTransportActive = true;
-            //}
-
+       
             if (_bossLives == 0 && _player != null)
             {
-                _animator.SetTrigger("OnEnemyDeath");
                 Destroy(this.gameObject, 1.5f);
                 _enemySpeed = 0f;
                 _frequency = 0f;
+                _animator.SetTrigger("OnEnemyDeath");
                 _uiManager.WinnerText();
             }
+
         }
     }
-
-
-    //IEnumerator BossDamageFlicker()
-    //{
-    //    while (true)
-    //    {
-    //        gameObject.SetActive(false);
-    //        Debug.Log("bossFlicker game object false");
-    //        yield return new WaitForSeconds(0.5f);
-    //        gameObject.SetActive(true);
-    //        Debug.Log("bossFlicker game object true");
-
-    //        _bossFlickerActive = false;
-    //    }
-
-    //}
 }

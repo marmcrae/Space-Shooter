@@ -180,7 +180,9 @@ MonoBehaviour:
   _enemies:
   - {fileID: 224240910945054698, guid: d6aefa2565e4a6e40ac063648f9314bd, type: 3}
   - {fileID: 1536713085344446606, guid: deeb0b93dbf058e4bbf3c882270a5422, type: 3}
-  _enemyCount: 0
+  - {fileID: 6770689331663412438, guid: 78b95140ff69ffc438c091cfc03992e5, type: 3}
+  enemyCount: 0
+  bossEnemyCount: 0
 --- !u!1 &42891358
 GameObject:
   m_ObjectHideFlags: 0

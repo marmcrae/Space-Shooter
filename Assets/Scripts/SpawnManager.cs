@@ -74,6 +74,10 @@ public class SpawnManager : MonoBehaviour
                 if (randomNum == 1)
                 {
                     _enemy.GetComponent<Enemy>().EnemyShield();
+                }else if(randomNum == 2)
+                {
+                    enemyCount += 1;
+                    _enemy = Instantiate(_enemies[2], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
                 }
 
                 yield return new WaitForSeconds(_spawnWaitTime);
@@ -111,7 +115,7 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnPowerUpRoutine()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(15f);
 
         while (_stopSpawning == false)
         {
@@ -147,7 +151,7 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator BossWaveWait()
     {
-        yield return new WaitForSeconds(5f);     
+        yield return new WaitForSeconds(10f);     
     }
 
 

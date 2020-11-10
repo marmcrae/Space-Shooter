@@ -97,7 +97,7 @@ public class SpawnManager : MonoBehaviour
                 _stopSpawning = false;
                 Debug.Log("Enemy == 0. Enemy Inst: " + _enemyInstantiationCount + " Enemy Count: " + enemyCount + " Wave Count: " + _waveNumber);
 
-                yield return new WaitForSeconds(3f);
+               // yield return new WaitForSeconds(3f);
             }
 
             
@@ -115,19 +115,19 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnPowerUpRoutine()
     {
-        yield return new WaitForSeconds(15f);
+        yield return new WaitForSeconds(30f);
 
         while (_stopSpawning == false)
         {
-            int randomPowerUp = Random.Range(0, 101);       
+            int randomPowerUp = Random.Range(0, 11);       
 
-            if (randomPowerUp < 15 )
-            //6 = super laser
+            if (randomPowerUp < 2 )
+            //6 = super laser | 7 = missile
             {
-                Instantiate(_powerUp[6], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                Instantiate(_powerUp[Random.Range(6,8)], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
 
             }
-            else if (randomPowerUp < 70 && randomPowerUp > 15)
+            else if (randomPowerUp > 2 && randomPowerUp < 7)
             //5 = Ammo Boost
             {
                 Instantiate(_powerUp[5], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
@@ -135,7 +135,7 @@ public class SpawnManager : MonoBehaviour
             else
             {
                 Instantiate(_powerUp[Random.Range(0 , 5)], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-                yield return new WaitForSeconds(Random.Range(1.0f, 8.0f));
+                yield return new WaitForSeconds(Random.Range(10f, 20f));
             }
             yield return null;
         }

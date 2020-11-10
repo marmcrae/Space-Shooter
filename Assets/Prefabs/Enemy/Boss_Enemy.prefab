@@ -158,6 +158,14 @@ MonoBehaviour:
   _bossMagnitude: 10
   _bossSpeed: 0.5
   _isEnemyShieldActive: 0
+  _bossTransportActive: 0
+  _bossFlickerActive: 0
+  aggEnemyMinRot: 80
+  aggEnemyMaxRot: 120
+  aggMinMoveSpeed: 1.75
+  aggMaxMoveSpeed: 2.25
+  rotationSpeed: 75
+  movementSpeed: 2
 --- !u!95 &3000064893744366318
 Animator:
   serializedVersion: 3

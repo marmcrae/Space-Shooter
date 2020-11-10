@@ -15,6 +15,8 @@ public class TriplePowerUp : MonoBehaviour
     [SerializeField]
     private AudioClip _powerClip;
 
+    [SerializeField]
+    private GameObject _homingMissilePrefab;
 
     // Update is called once per frame
     void Update()
@@ -75,6 +77,10 @@ public class TriplePowerUp : MonoBehaviour
 
                 case 6:
                     player.SuperLaserActive();
+                    break;
+
+                case 7:
+                    Instantiate(_homingMissilePrefab, new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
                     break;
 
                 default:

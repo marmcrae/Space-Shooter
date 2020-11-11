@@ -97,8 +97,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _powerUpSpeed: 3
-  powerupId: 5
+  powerupId: 3
   _powerClip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
+  _homingMissilePrefab: {fileID: 0}
 --- !u!58 &4030465898931942306
 CircleCollider2D:
   m_ObjectHideFlags: 0

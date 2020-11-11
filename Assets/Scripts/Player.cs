@@ -137,9 +137,9 @@ public class Player : MonoBehaviour
         {
             transform.Translate(direction * _lowThrusterSpeed * Time.deltaTime);
         }
-        else if (!_isSpeedPowerupActive && playerHealth == 0)
+        else if (!_isSpeedPowerupActive && playerHealth <= 0)
         {
-            transform.Translate(direction* 0 * Time.deltaTime);
+           // transform.Translate(direction* 0 * Time.deltaTime);
         }
         else
         {
@@ -171,7 +171,8 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.X))
         {
-            playerHealth = 100f; 
+            playerHealth = 100f;
+            _thrusterLow = false;
         }
     }
 

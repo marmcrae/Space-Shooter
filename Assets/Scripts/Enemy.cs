@@ -195,6 +195,8 @@ public class Enemy : MonoBehaviour
                 transform.Translate(Vector3.right * 30f * Time.deltaTime);
             }
 
+       
+
         }
 
 
@@ -238,6 +240,12 @@ public class Enemy : MonoBehaviour
             {
                 transform.position = Vector3.MoveTowards(transform.position, _laserTaget.position, -1 * 15f * Time.deltaTime);
             }    
+        }
+
+        float xRandom = Random.Range(-8, 8);
+        if (transform.position.y < -5.5f)
+        {
+            transform.position = new Vector3(xRandom, 7f, 0);
         }
     }
 

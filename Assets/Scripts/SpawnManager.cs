@@ -83,7 +83,6 @@ public class SpawnManager : MonoBehaviour
                 }
                 else if (randomNum == 3)
                 {
-                    Debug.Log("Enemy avoid called");
                     _enemy.GetComponent<Enemy>()._enemyAvoidShot = true;
                 }
 

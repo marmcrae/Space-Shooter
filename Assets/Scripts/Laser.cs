@@ -11,6 +11,13 @@ public class Laser : MonoBehaviour
     [SerializeField]
     public bool _isEnemyLaser = false;
 
+    public Player player;
+
+    private void Start()
+    {
+        Player player = GameObject.Find("Player").GetComponent<Player>();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -46,11 +53,19 @@ public class Laser : MonoBehaviour
         }
     }
 
+ 
 
     public void EnemyLaserOn()
     {
         _isEnemyLaser = true;
+
+        if (player.transform.position.y > 0)
+        {
+            _isEnemyLaser = false;
+        }
+
     }
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {

@@ -97,8 +97,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _powerUpSpeed: 3
-  powerupId: 3
+  powerupId: 5
   _powerClip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
+  _homingMissilePrefab: {fileID: 0}
 --- !u!50 &3376629980762780622
 Rigidbody2D:
   serializedVersion: 4

@@ -73,18 +73,25 @@ public class SpawnManager : MonoBehaviour
                 int randomNum = Random.Range(1, 4);
                 if (randomNum == 1)
                 {
-                    _enemy.GetComponent<Enemy>().EnemyShield();
+                 _enemy.GetComponent<Enemy>().EnemyShield();
+
                 }else if(randomNum == 2)
                 {
                     enemyCount += 1;
+                    _enemyInstantiationCount += 1;
                     _enemy = Instantiate(_enemies[2], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                }
+                else if (randomNum == 3)
+                {
+                    Debug.Log("Enemy avoid called");
+                    _enemy.GetComponent<Enemy>()._enemyAvoidShot = true;
                 }
 
                 yield return new WaitForSeconds(_spawnWaitTime);
             }
             Debug.Log("Out of while loop. Enemy Inst: " + _enemyInstantiationCount + " Enemy Count: " + enemyCount + " Wave Count: " + _waveNumber);
 
-
+            
             _stopSpawning = true;
             _enemyInstantiationCount = 0;
 
@@ -93,14 +100,13 @@ public class SpawnManager : MonoBehaviour
                 enemyCount = 0;
                 _uiManager.UpdateLevel(_waveNumber);
                 _waveNumber += 1;
-                _maxEnemies += 4;
+                _maxEnemies += 2;
                 _stopSpawning = false;
                 Debug.Log("Enemy == 0. Enemy Inst: " + _enemyInstantiationCount + " Enemy Count: " + enemyCount + " Wave Count: " + _waveNumber);
 
-               // yield return new WaitForSeconds(3f);
+                yield return new WaitForSeconds(5f);
             }
 
-            
             Debug.Log("After Max Enemy upped. Enemy Inst: " + _enemyInstantiationCount + " Enemy Count: " + enemyCount + " Wave Count: " + _waveNumber + "Max Enemies: " + _maxEnemies);
 
             yield return null;
@@ -121,16 +127,18 @@ public class SpawnManager : MonoBehaviour
         {
             int randomPowerUp = Random.Range(0, 11);       
 
-            if (randomPowerUp < 2 )
+            if (randomPowerUp <= 2 )
             //6 = super laser | 7 = missile
             {
                 Instantiate(_powerUp[Random.Range(6,8)], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                yield return new WaitForSeconds(20f);
 
             }
             else if (randomPowerUp > 2 && randomPowerUp < 7)
             //5 = Ammo Boost
             {
                 Instantiate(_powerUp[5], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                yield return new WaitForSeconds(10f);
             }
             else
             {

@@ -8,7 +8,10 @@ public class Player : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 3.5f;
- 
+
+    [SerializeField]
+    private float _lowThrusterSpeed = 1.5f;
+
     [SerializeField]
     private float _speedBoost = 2f;
    
@@ -61,12 +64,15 @@ public class Player : MonoBehaviour
     private bool _isHealthBoostActive = false;
     private bool _isNegativeBoostActive = false;
     private bool _isSuperLaserActive = false;
+    private bool _thrusterLow = false;
     public bool isShieldsActive = false;
 
     private float _canFire = 0f;
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
     private ShakeBehavior _shakeBehavior;
+
+    public float playerHealth = 100f;
  
 
 
@@ -126,10 +132,19 @@ public class Player : MonoBehaviour
         if(!_isSpeedPowerupActive)
         {
             transform.Translate(direction * _speed * Time.deltaTime);
+            ThrusterBehavior();
+        }else if (!_isSpeedPowerupActive && _thrusterLow == true)
+        {
+            transform.Translate(direction * _lowThrusterSpeed * Time.deltaTime);
+        }
+        else if (!_isSpeedPowerupActive && playerHealth == 0)
+        {
+            transform.Translate(direction* 0 * Time.deltaTime);
         }
         else
         {
             transform.Translate(direction * (_speed *  _speedBoost ) * Time.deltaTime);
+           
         }
         
         
@@ -145,6 +160,20 @@ public class Player : MonoBehaviour
         }
     }
 
+    void ThrusterBehavior()
+    {
+        playerHealth -= .05f;
+
+        if (playerHealth < 25)
+        {
+            _thrusterLow = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            playerHealth = 100f; 
+        }
+    }
 
     void LaserBehavior()
     {

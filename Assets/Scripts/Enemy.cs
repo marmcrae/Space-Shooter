@@ -46,9 +46,11 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private bool _bossWinnerActive = false;
 
+    [SerializeField]
+    public bool _enemyAvoidShot = false;
+
     private float _canFire = -1;
-    private int _bossLives = 20;
-        
+    private int _bossLives = 20;       
 
     private Player _player;
     private Animator _animator;
@@ -60,9 +62,10 @@ public class Enemy : MonoBehaviour
     Vector3 pos;
     Vector3 axis;
 
+    private Transform _laserTaget;
+
 
     /**************AGGRESSIVE ENEMY*****************/
-
     public float aggEnemyMinRot = 80.0f;
     public float aggEnemyMaxRot = 120.0f;
     public float aggMinMoveSpeed = 1.75f;
@@ -71,9 +74,8 @@ public class Enemy : MonoBehaviour
     private float rotationSpeed = 75.0f; // Degrees per second
     [SerializeField]
     private float movementSpeed = 10.0f; // Units per second;
-    private Transform target;
+    private Transform playerTarget;
     private Quaternion quaternion;
-
 
 
     private void Start()
@@ -112,9 +114,8 @@ public class Enemy : MonoBehaviour
         pos = transform.position;
         axis = transform.right;
 
-
         /**************Agg Enemy********************/
-        target = GameObject.Find("Player").transform;
+        playerTarget = GameObject.Find("Player").transform;
         rotationSpeed = Random.Range(aggEnemyMinRot, aggEnemyMaxRot);
         movementSpeed = Random.Range(aggMinMoveSpeed, aggMaxMoveSpeed);
     }
@@ -124,7 +125,8 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         EnemyBehavior();
-        LaserFire();   
+        LaserFire();
+        
     }
 
 
@@ -151,9 +153,9 @@ public class Enemy : MonoBehaviour
         if(tag == "OrgEnemy")
         {
             transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
+            EnemyAvoid();
 
             float xRandom = Random.Range(-8, 8);
-
             if (transform.position.y < -5.5f)
             {
                 transform.position = new Vector3(xRandom, 7f, 0);
@@ -165,6 +167,7 @@ public class Enemy : MonoBehaviour
         {
             pos += Vector3.down * Time.deltaTime * _speed;
             transform.position = pos + axis * Mathf.Sin(Time.time * _frequency) * _magnitude;
+            EnemyAvoid();
 
             if (transform.position.y < -5.5f)
             {
@@ -178,9 +181,8 @@ public class Enemy : MonoBehaviour
 
         else if (tag == "AggressiveEnemy")
         {
-
-            Vector3 v3 = target.position - transform.position;
-            float distance = Vector3.Distance(target.position, transform.position);
+            Vector3 v3 = playerTarget.position - transform.position;
+            float distance = Vector3.Distance(playerTarget.position, transform.position);
             float angle = Mathf.Atan2(v3.y, v3.x) * Mathf.Rad2Deg;
             quaternion = Quaternion.AngleAxis(angle, Vector3.forward);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, quaternion, rotationSpeed * Time.deltaTime);
@@ -198,7 +200,6 @@ public class Enemy : MonoBehaviour
 
         else if (tag == "BossEnemy")
         {
-            //transform.Translate(-1f, 1.4f, 0);
             float randoX = Random.Range(-8, 8);
             float randoY = Random.Range(3, 5);
             position = new Vector3(randoX, randoY, 0);
@@ -226,6 +227,20 @@ public class Enemy : MonoBehaviour
         _enemyShieldSprite.gameObject.SetActive(true);
     }
 
+    public void EnemyAvoid()
+    {
+        _laserTaget = GameObject.FindWithTag("Laser").transform;
+        float laserDistance = Vector3.Distance(transform.position, _laserTaget.position);
+        
+        if (_laserTaget != null && _enemyAvoidShot == true) 
+        {
+            if (laserDistance < 3f)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, _laserTaget.position, -1 * 15f * Time.deltaTime);
+            }    
+        }
+    }
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -246,8 +261,7 @@ public class Enemy : MonoBehaviour
 
 
         if (other.tag == "Laser" && tag != "BossEnemy" && _isEnemyShieldActive == false)
-        {
-      
+        { 
          Destroy(other.gameObject);
 
             if (_player != null)
@@ -259,17 +273,14 @@ public class Enemy : MonoBehaviour
                 _frequency = 0f;
                 _animator.SetTrigger("OnEnemyDeath");
             }
-
             Destroy(GetComponent<Collider2D>());
         }
 
+
         if (other.tag == "HomingMissile" && tag != "BossEnemy" && _isEnemyShieldActive == false)
         {
-
             Destroy(other.gameObject);
             _animator.SetTrigger("OnDestroy");
-
-
             if (_player != null)
             {
                 Destroy(this.gameObject, 1.5f);
@@ -283,6 +294,8 @@ public class Enemy : MonoBehaviour
             Destroy(GetComponent<Collider2D>());
         }
 
+
+
         if (other.tag == "Laser" || other.tag == "Player" && tag == "EnemyShield" && _isEnemyShieldActive == true)
         {
             Destroy(other.gameObject);
@@ -290,6 +303,7 @@ public class Enemy : MonoBehaviour
             _enemyShieldSprite.gameObject.SetActive(false);
             _player.AddPoints(10);
         }
+
 
         if( tag == "AggressiveEnemy"  && other.tag == "Player")
         {
@@ -305,6 +319,8 @@ public class Enemy : MonoBehaviour
             _frequency = 0f;
             _animator.SetTrigger("OnEnemyDeath");
         }
+
+
 
         if (tag == "BossEnemy" && other.tag == "Player" || other.tag == "Laser")
         {

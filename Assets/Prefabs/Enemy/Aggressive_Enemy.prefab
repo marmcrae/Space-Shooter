@@ -62,12 +62,14 @@ MonoBehaviour:
   _isEnemyShieldActive: 0
   _bossTransportActive: 0
   _bossFlickerActive: 0
+  _bossWinnerActive: 0
+  _enemyAvoidShot: 0
   aggEnemyMinRot: 80
   aggEnemyMaxRot: 120
   aggMinMoveSpeed: 1.75
   aggMaxMoveSpeed: 2.25
-  rotationSpeed: 150
-  movementSpeed: 10
+  rotationSpeed: 200
+  movementSpeed: 15
 --- !u!212 &2997920443072669703
 SpriteRenderer:
   m_ObjectHideFlags: 0

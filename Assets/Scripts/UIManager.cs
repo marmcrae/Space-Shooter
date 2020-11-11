@@ -33,15 +33,33 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Image _ShieldImage;
 
+    [SerializeField]
+    private Slider _thrusterSlider;
+    [SerializeField]
+    private Image _thrusterBackground;
+    [SerializeField]
+    private Text _thrusterText;
+
+    private float _currentHealth;
+    private float _maxHealth = 100f;
+
     private GameManager _gameManager;
     private Player _player;
     private SpawnManager _spawnManager;
+
+
+    //thruster color
+    float r = 137;
+    float g = 31;
+    float b = 245;
 
 
     // Start is called before the first frame update
     void Start()
     {
         _scoreText.text = "SCORE: " +  0;
+        _thrusterText.text = "Thruster Gauge";
+        _thrusterBackground.color = Color.blue;
         _gameOver.gameObject.SetActive(false);
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
         _player = GameObject.Find("Player").GetComponent<Player>();
@@ -61,6 +79,11 @@ public class UIManager : MonoBehaviour
         }
 
         _ShieldImage.gameObject.SetActive(false);
+    }
+
+    private void Update()
+    {
+        ThrusterUpdate();
     }
 
 
@@ -127,6 +150,26 @@ public class UIManager : MonoBehaviour
         {
             GameOverSequence();
         }
+    }
+
+    public void ThrusterUpdate()
+    {
+
+            _currentHealth = _player.playerHealth;
+            float fillAmount = _currentHealth / _maxHealth;
+            _thrusterBackground.fillAmount = fillAmount;
+            _thrusterText.text = "Thruster Gauge";
+           
+        if(_currentHealth < 25f)
+        {    
+            _thrusterText.text = "Thruster is low!! Press X to refill";
+            _thrusterBackground.color = Color.red;
+        }
+        else
+        {
+            _thrusterBackground.color = Color.blue; ;
+            _thrusterText.text = "Thruster Gauge";
+        }   
     }
 
 

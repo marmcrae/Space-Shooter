@@ -28,7 +28,10 @@ public class Player : MonoBehaviour
     private int _score = 0;
 
     [SerializeField]
-    private int _ammo = 50;
+    public int _ammo = 100;
+
+    [SerializeField]
+    public int _maxAmmo = 100;
 
     [SerializeField]
     private GameObject _laserPrefab;
@@ -36,6 +39,8 @@ public class Player : MonoBehaviour
     private GameObject _superLaserPrefab;
     [SerializeField]
     private GameObject _tripleShotPrefab;
+    [SerializeField]
+    private GameObject _homingMissilePrefab;
 
     [SerializeField]
     private GameObject _shieldSprite;
@@ -65,15 +70,18 @@ public class Player : MonoBehaviour
     private bool _isNegativeBoostActive = false;
     private bool _isSuperLaserActive = false;
     private bool _thrusterLow = false;
+    private bool _isHomingMissileActive = false;
     public bool isShieldsActive = false;
+
 
     private float _canFire = 0f;
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
     private ShakeBehavior _shakeBehavior;
 
+    public float playerThrust = 100f;
     public float playerHealth = 100f;
- 
+
 
 
 
@@ -115,10 +123,15 @@ public class Player : MonoBehaviour
         CalculateMovement();
         PowerUpCollect();
 
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire && _isHomingMissileActive == false)
         {
             LaserBehavior();
-        }    
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Space) && _isHomingMissileActive == true)
+        {
+            HomingMissile();
+        }
     }
 
    
@@ -128,23 +141,23 @@ public class Player : MonoBehaviour
         float verticalInput = Input.GetAxis("Vertical");
 
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
+        //ThrusterBehavior();
 
-        if(!_isSpeedPowerupActive)
+        if (!_isSpeedPowerupActive && _thrusterLow == false)
         {
             transform.Translate(direction * _speed * Time.deltaTime);
             ThrusterBehavior();
-        }else if (!_isSpeedPowerupActive && _thrusterLow == true)
+
+        }
+        else if (!_isSpeedPowerupActive && _thrusterLow == true)
         {
             transform.Translate(direction * _lowThrusterSpeed * Time.deltaTime);
-        }
-        else if (!_isSpeedPowerupActive && playerHealth <= 0)
-        {
-           // transform.Translate(direction* 0 * Time.deltaTime);
+            ThrusterBehavior();
         }
         else
         {
             transform.Translate(direction * (_speed *  _speedBoost ) * Time.deltaTime);
-           
+
         }
         
         
@@ -162,19 +175,21 @@ public class Player : MonoBehaviour
 
     void ThrusterBehavior()
     {
-        playerHealth -= .05f;
+        playerThrust -= .05f;
 
-        if (playerHealth < 25)
+        if (playerThrust < 25)
         {
             _thrusterLow = true;
         }
 
         if (Input.GetKeyDown(KeyCode.X))
         {
-            playerHealth = 100f;
+            playerThrust = 100f;
             _thrusterLow = false;
         }
     }
+
+
 
     void LaserBehavior()
     {
@@ -216,9 +231,15 @@ public class Player : MonoBehaviour
         }
 
         _shakeBehavior.TriggerShake();
-        _lives -= 1;
-        _uiManager.UpdateLives(_lives);
-
+        playerHealth -= 10;
+        
+        if(playerHealth == 0)
+        {
+            _lives -= 1;
+            _uiManager.UpdateLives(_lives);
+            playerHealth = 100f;
+        }
+      
         if(_lives < 0)
         {
             _lives = 0;
@@ -312,7 +333,7 @@ public class Player : MonoBehaviour
     public void AmmoBoost()
     {
         _isAmmoBoostActive = true;
-        _ammo = 50;
+        _ammo = 100;
         _uiManager.UpdateAmmo(_ammo);
     }
 
@@ -322,6 +343,7 @@ public class Player : MonoBehaviour
 
         if(_lives == 2) 
         {
+            playerHealth = 100f;
             _lives += 1;
             _uiManager.UpdateLives(_lives);
             _rightEngineDown.SetActive(false);
@@ -329,13 +351,15 @@ public class Player : MonoBehaviour
         }
         else if(_lives == 1)
         {
+            playerHealth = 100f;
             _lives += 1;
             _uiManager.UpdateLives(_lives);
             _rightEngineDown.SetActive(false);
         }
         
-        if (_lives > 3)
+        if (_lives >= 3)
         {
+            playerHealth = 100f;
             _lives = 3;
         }
     }
@@ -349,6 +373,19 @@ public class Player : MonoBehaviour
         {
             yield return new WaitForSeconds(5f);
             _isNegativeBoostActive = false;
+        }
+    }
+
+    public void HomingMissile()
+    {
+        Instantiate(_homingMissilePrefab, new Vector3(Random.Range(-8f, 8f), -4, 0), Quaternion.identity);
+
+        StartCoroutine(SetHomingToFalse());
+
+        IEnumerator SetHomingToFalse()
+        {
+            yield return new WaitForSeconds(5f);
+            _isHomingMissileActive = false;
         }
     }
 

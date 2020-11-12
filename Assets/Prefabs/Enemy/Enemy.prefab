@@ -63,6 +63,8 @@ MonoBehaviour:
   _isEnemyShieldActive: 0
   _bossTransportActive: 0
   _bossFlickerActive: 0
+  _bossWinnerActive: 0
+  _enemyAvoidShot: 0
   aggEnemyMinRot: 80
   aggEnemyMaxRot: 120
   aggMinMoveSpeed: 1.75
@@ -267,6 +269,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.3333334
       objectReference: {fileID: 0}
+    - target: {fileID: 8411127573461087770, guid: 9471b2f7601f70b4b8f2dac0913c6bf1,
+        type: 3}
+      propertyPath: m_TagString
+      value: EnemyLaser
+      objectReference: {fileID: 0}
     - target: {fileID: 8411127573461087780, guid: 9471b2f7601f70b4b8f2dac0913c6bf1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -276,6 +283,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: -1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8411127573694883716, guid: 9471b2f7601f70b4b8f2dac0913c6bf1,
+        type: 3}
+      propertyPath: m_TagString
+      value: EnemyLaser
       objectReference: {fileID: 0}
     - target: {fileID: 8411127573694883770, guid: 9471b2f7601f70b4b8f2dac0913c6bf1,
         type: 3}

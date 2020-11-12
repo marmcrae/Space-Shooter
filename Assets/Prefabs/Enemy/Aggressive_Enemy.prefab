@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemySpeed: 4
   _fireRate: 0
-  _laserPrefab: {fileID: 2277915025424067856, guid: 9471b2f7601f70b4b8f2dac0913c6bf1,
+  _laserPrefab: {fileID: 4049669792225173529, guid: 99698ebf1f64aac478582eb955928a59,
     type: 3}
   _enemyShieldSprite: {fileID: 4706597910647609387}
   _frequency: 1

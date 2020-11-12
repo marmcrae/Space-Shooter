@@ -41,6 +41,10 @@ public class Enemy : MonoBehaviour
     private bool _bossTransportActive = false;
 
     [SerializeField]
+    public bool _isExploded { get; private set; } = false;
+
+    [SerializeField]
+
     private bool _bossFlickerActive = false;
 
     [SerializeField]
@@ -62,7 +66,7 @@ public class Enemy : MonoBehaviour
     Vector3 pos;
     Vector3 axis;
 
-    private Transform _laserTaget;
+    private GameObject _laserTaget;
 
 
     /**************AGGRESSIVE ENEMY*****************/
@@ -78,10 +82,20 @@ public class Enemy : MonoBehaviour
     private Quaternion quaternion;
 
 
+    private void OnEnable()
+    {
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _spawnManager.AddEnemyCount();
+    }
+
+    private void OnDisable()
+    {
+        _spawnManager.DecEnemyCount();
+    }
+
     private void Start()
     {
-        _player = GameObject.Find("Player").GetComponent<Player>();
-        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _player = GameObject.Find("Player").GetComponent<Player>(); 
         _shakeBehavior = GameObject.Find("Main Camera").GetComponent<ShakeBehavior>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
 
@@ -125,8 +139,7 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         EnemyBehavior();
-        LaserFire();
-        
+        LaserFire();      
     }
 
 
@@ -153,17 +166,17 @@ public class Enemy : MonoBehaviour
         if(tag == "OrgEnemy")
         {
             transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
-            EnemyAvoid();
-
+   
             float xRandom = Random.Range(-8, 8);
             if (transform.position.y < -5.5f)
             {
                 transform.position = new Vector3(xRandom, 7f, 0);
-            }          
+            }
+            EnemyAvoid();
         }  
         
 
-        else if(tag == "GreenEnemy")
+        if(tag == "GreenEnemy")
         {
             pos += Vector3.down * Time.deltaTime * _speed;
             transform.position = pos + axis * Mathf.Sin(Time.time * _frequency) * _magnitude;
@@ -179,28 +192,35 @@ public class Enemy : MonoBehaviour
         }
 
 
-        else if (tag == "AggressiveEnemy")
+       if (tag == "AggressiveEnemy")
         {
-            Vector3 v3 = playerTarget.position - transform.position;
-            float distance = Vector3.Distance(playerTarget.position, transform.position);
-            float angle = Mathf.Atan2(v3.y, v3.x) * Mathf.Rad2Deg;
-            quaternion = Quaternion.AngleAxis(angle, Vector3.forward);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, quaternion, rotationSpeed * Time.deltaTime);
-            transform.Translate(Vector3.right * movementSpeed * Time.deltaTime);
-
-            if (distance < 4f)
+            if (playerTarget != null)
             {
-                Debug.Log("Distance is: " + distance);
+                Vector3 v3 = playerTarget.position - transform.position;
+                float distance = Vector3.Distance(playerTarget.position, transform.position);
+                float angle = Mathf.Atan2(v3.y, v3.x) * Mathf.Rad2Deg;
+                quaternion = Quaternion.AngleAxis(angle, Vector3.forward);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, quaternion, rotationSpeed * Time.deltaTime);
-                transform.Translate(Vector3.right * 30f * Time.deltaTime);
+                transform.Translate(Vector3.right * movementSpeed * Time.deltaTime);
+
+
+                if (distance < 4f)
+                {
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, quaternion, rotationSpeed * Time.deltaTime);
+                    transform.Translate(Vector3.right * 30f * Time.deltaTime);
+                }
+
             }
+        }
 
-       
-
+        if ((tag == "OrgEnemy" || tag == "AggressiveEnemy" || tag == "GreenEnemy") && transform.position.y < -15)
+        {
+            Destroy(this.gameObject);
+          
         }
 
 
-        else if (tag == "BossEnemy")
+        if (tag == "BossEnemy")
         {
             float randoX = Random.Range(-8, 8);
             float randoY = Random.Range(3, 5);
@@ -231,21 +251,21 @@ public class Enemy : MonoBehaviour
 
     public void EnemyAvoid()
     {
-        _laserTaget = GameObject.FindWithTag("Laser").transform;
-        float laserDistance = Vector3.Distance(transform.position, _laserTaget.position);
-        
-        if (_laserTaget != null && _enemyAvoidShot == true) 
-        {
-            if (laserDistance < 3f)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, _laserTaget.position, -1 * 15f * Time.deltaTime);
-            }    
-        }
 
-        float xRandom = Random.Range(-8, 8);
-        if (transform.position.y < -5.5f)
+        _laserTaget = GameObject.FindWithTag("Laser");
+
+        if (_laserTaget != null)
         {
-            transform.position = new Vector3(xRandom, 7f, 0);
+
+            float laserDistance = Vector3.Distance(transform.position, _laserTaget.transform.position);
+
+            if (_laserTaget != null && _enemyAvoidShot == true)
+            {
+                if (laserDistance < 3f)
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, _laserTaget.transform.position, -1 * 15f * Time.deltaTime);
+                }
+            }
         }
     }
 
@@ -261,10 +281,10 @@ public class Enemy : MonoBehaviour
             }
 
             Destroy(this.gameObject, 2.3f);
-            _spawnManager.enemyCount--;
             _enemySpeed = 0f;
             _frequency = 0f;
             _animator.SetTrigger("OnEnemyDeath");
+            _isExploded = true;
         }
 
 
@@ -275,13 +295,13 @@ public class Enemy : MonoBehaviour
             if (_player != null)
             {
                 Destroy(this.gameObject, 1.5f);
-                _spawnManager.enemyCount--;
                 _player.AddPoints(10);
                 _enemySpeed = 0f;
                 _frequency = 0f;
                 _animator.SetTrigger("OnEnemyDeath");
+                _isExploded = true;
+                other.GetComponent<Collider2D>().enabled = false;
             }
-            Destroy(GetComponent<Collider2D>());
         }
 
 
@@ -291,15 +311,14 @@ public class Enemy : MonoBehaviour
             _animator.SetTrigger("OnDestroy");
             if (_player != null)
             {
-                Destroy(this.gameObject, 1.5f);
-                _spawnManager.enemyCount--;
-                _player.AddPoints(10);
                 _enemySpeed = 0f;
                 _frequency = 0f;
+                Destroy(this.gameObject, 1.5f);
+                _player.AddPoints(10);
                 _animator.SetTrigger("OnEnemyDeath");
+                _isExploded = true;
+                other.GetComponent<Collider2D>().enabled = false;
             }
-
-            Destroy(GetComponent<Collider2D>());
         }
 
 
@@ -321,11 +340,11 @@ public class Enemy : MonoBehaviour
                 _player.Damage();
             }
 
+            movementSpeed = 0;
+            rotationSpeed = 0;
             Destroy(this.gameObject, 2.3f);
-            _spawnManager.enemyCount--;
-            _enemySpeed = 0f;
-            _frequency = 0f;
             _animator.SetTrigger("OnEnemyDeath");
+            _isExploded = true;
         }
 
 
@@ -339,16 +358,18 @@ public class Enemy : MonoBehaviour
        
             if (_bossLives == 0 && _player != null)
             {
-                Destroy(this.gameObject, 2f);
-                _enemySpeed = 0f;
-                _frequency = 0f;
+                _bossSpeed = 0f;
+                _bossFrequency = 0f;
+                _shakeBehavior.TriggerShake();
+                Destroy(this.gameObject, 2.5f);
                 _animator.SetTrigger("OnEnemyDeath");
-                _uiManager.WinnerText(); 
+                _isExploded = true;
+                _bossWinnerActive = true;
 
-                if (_bossWinnerActive == false)
+                if (_bossWinnerActive == true)
                 {
+                    Debug.Log("boss winner start coroutine called");
                     StartCoroutine(WinnerTextCoroutine());
-                    _bossWinnerActive = true;
                 }
             }
         }
@@ -356,11 +377,8 @@ public class Enemy : MonoBehaviour
 
     IEnumerator WinnerTextCoroutine()
     {
-        
         yield return new WaitForSeconds(2f);
         Debug.Log("Winner text called");
-        _uiManager.WinnerText();
-        _bossWinnerActive = false;
-     
+        _uiManager.WinnerText();          
     }
 }

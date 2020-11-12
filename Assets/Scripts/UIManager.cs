@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +12,9 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private Text _ammoText;
+
+    [SerializeField]
+    private Text _maxAmmoText;
 
     [SerializeField]
     private Text _restartText;
@@ -40,26 +41,27 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text _thrusterText;
 
+    [SerializeField]
+    private Slider _healthSlider;
+    [SerializeField]
+    private Image _healthBackground;
+    [SerializeField]
+    private Text _healthText;
+
     private float _currentHealth;
     private float _maxHealth = 100f;
+
+    private float _currentThrust;
+    private float _maxThrust = 100f;
 
     private GameManager _gameManager;
     private Player _player;
     private SpawnManager _spawnManager;
 
 
-    //thruster color
-    float r = 137;
-    float g = 31;
-    float b = 245;
-
-
     // Start is called before the first frame update
     void Start()
     {
-        _scoreText.text = "SCORE: " +  0;
-        _thrusterText.text = "Thruster Gauge";
-        _thrusterBackground.color = Color.blue;
         _gameOver.gameObject.SetActive(false);
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
         _player = GameObject.Find("Player").GetComponent<Player>();
@@ -79,11 +81,19 @@ public class UIManager : MonoBehaviour
         }
 
         _ShieldImage.gameObject.SetActive(false);
+
+        _scoreText.text = "SCORE: " + 0;
+        _thrusterText.text = "Thruster";
+        _thrusterBackground.color = Color.blue;
+        _healthText.text = "Health";
+        _ammoText.text = "CURRENT AMMO: " + _player._ammo.ToString();
+        _maxAmmoText.text = "MAX AMMO: " + _player._maxAmmo.ToString();
     }
 
     private void Update()
     {
         ThrusterUpdate();
+        HealthUpdate();
     }
 
 
@@ -96,6 +106,7 @@ public class UIManager : MonoBehaviour
     public void UpdateAmmo(int playerAmmo)
     {
         _ammoText.text = "CURRENT AMMO: " + playerAmmo.ToString();
+        _maxAmmoText.text = "MAX AMMO: " + _player._maxAmmo.ToString();
 
         if (playerAmmo == 0)
         {
@@ -155,12 +166,13 @@ public class UIManager : MonoBehaviour
     public void ThrusterUpdate()
     {
 
-            _currentHealth = _player.playerHealth;
-            float fillAmount = _currentHealth / _maxHealth;
+            _currentThrust = _player.playerThrust;
+
+            float fillAmount = _currentThrust / _maxThrust;
             _thrusterBackground.fillAmount = fillAmount;
-            _thrusterText.text = "Thruster Gauge";
+            _thrusterText.text = "Thruster";
            
-        if(_currentHealth < 25f)
+        if(_currentThrust < 25f)
         {    
             _thrusterText.text = "Thruster is low!! Press X to refill";
             _thrusterBackground.color = Color.red;
@@ -168,8 +180,27 @@ public class UIManager : MonoBehaviour
         else
         {
             _thrusterBackground.color = Color.blue; ;
-            _thrusterText.text = "Thruster Gauge";
+            _thrusterText.text = "Thruster";
         }   
+    }
+
+    public void HealthUpdate()
+    {
+
+        _currentHealth = _player.playerHealth;
+        float fillAmount = _currentHealth / _maxHealth;
+        _healthBackground.fillAmount = fillAmount;
+        _healthText.text = "Health";
+
+        if (_currentHealth < 25f)
+        {
+            _healthText.color = Color.red;
+        }
+        else
+        {
+            _healthText.color = Color.white;
+        }
+
     }
 
 

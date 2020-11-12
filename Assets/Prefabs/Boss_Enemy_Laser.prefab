@@ -99,6 +99,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _laserSpeed: 8
   _isEnemyLaser: 1
+  _isEnemyLaserShootUp: 0
+  player: {fileID: 0}
 --- !u!50 &-2529736694549094291
 Rigidbody2D:
   serializedVersion: 4
@@ -133,7 +135,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.056111455, y: -0.4208355}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -144,7 +146,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.39, y: 1.17}
+  m_Size: {x: 2.5970523, y: 2.0116708}
   m_EdgeRadius: 0
 --- !u!1 &7683688648232739386
 GameObject:

@@ -160,6 +160,8 @@ MonoBehaviour:
   _isEnemyShieldActive: 0
   _bossTransportActive: 0
   _bossFlickerActive: 0
+  _bossWinnerActive: 0
+  _enemyAvoidShot: 0
   aggEnemyMinRot: 80
   aggEnemyMaxRot: 120
   aggMinMoveSpeed: 1.75
@@ -192,10 +194,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4391964644830548740}
     m_Modifications:
+    - target: {fileID: 3145479264671069118, guid: 1783c252b0159ab4a826d09a346d139e,
+        type: 3}
+      propertyPath: m_Offset.y
+      value: -0.13415596
+      objectReference: {fileID: 0}
+    - target: {fileID: 3145479264671069118, guid: 1783c252b0159ab4a826d09a346d139e,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 1.4383118
+      objectReference: {fileID: 0}
+    - target: {fileID: 3145479264671069118, guid: 1783c252b0159ab4a826d09a346d139e,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: 0.016857445
+      objectReference: {fileID: 0}
+    - target: {fileID: 3145479264671069118, guid: 1783c252b0159ab4a826d09a346d139e,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1.1519581
+      objectReference: {fileID: 0}
     - target: {fileID: 5023374785148162513, guid: 1783c252b0159ab4a826d09a346d139e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.007
+      value: 0.036
       objectReference: {fileID: 0}
     - target: {fileID: 5023374785148162513, guid: 1783c252b0159ab4a826d09a346d139e,
         type: 3}
@@ -250,7 +272,7 @@ PrefabInstance:
     - target: {fileID: 5023374785148162513, guid: 1783c252b0159ab4a826d09a346d139e,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 4
+      value: 4.218827
       objectReference: {fileID: 0}
     - target: {fileID: 5023374785148162513, guid: 1783c252b0159ab4a826d09a346d139e,
         type: 3}

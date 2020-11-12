@@ -64,6 +64,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Untagged
       objectReference: {fileID: 0}
+    - target: {fileID: 7721021695494788972, guid: 6f5bc5f650d849c478bee1f906d76f7c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7721021695494788975, guid: 6f5bc5f650d849c478bee1f906d76f7c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -134,7 +139,8 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.20000002
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7721021695494788972, guid: 6f5bc5f650d849c478bee1f906d76f7c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6f5bc5f650d849c478bee1f906d76f7c, type: 3}
 --- !u!4 &8411127573461087780 stripped
 Transform:
@@ -173,6 +179,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 7721021695494788972, guid: 6f5bc5f650d849c478bee1f906d76f7c,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: 0.9850287
+      objectReference: {fileID: 0}
+    - target: {fileID: 7721021695494788972, guid: 6f5bc5f650d849c478bee1f906d76f7c,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 2.7536435
       objectReference: {fileID: 0}
     - target: {fileID: 7721021695494788975, guid: 6f5bc5f650d849c478bee1f906d76f7c,
         type: 3}

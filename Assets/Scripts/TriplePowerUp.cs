@@ -80,7 +80,7 @@ public class TriplePowerUp : MonoBehaviour
                     break;
 
                 case 7:
-                    Instantiate(_homingMissilePrefab, new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                    player.HomingMissile();
                     break;
 
                 default:

@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Laser : MonoBehaviour
+public class StarWeapon : MonoBehaviour
 {
-
     [SerializeField]
-    private float _laserSpeed = 8f;
+    private float _laserSpeed = 15f;
 
     [SerializeField]
     public bool _isEnemyLaser = false;
@@ -26,31 +25,31 @@ public class Laser : MonoBehaviour
         }
     }
 
-    
+
 
     // Update is called once per frame
     void Update()
     {
 
-        if(_isEnemyLaser == false || _isEnemyLaserShootUp == true)
+        if (_isEnemyLaser == false || _isEnemyLaserShootUp == true)
         {
-           ShootUp();
+            ShootUp();
         }
-        if(_isEnemyLaser == true && _isEnemyLaserShootUp == false)
+        if (_isEnemyLaser == true && _isEnemyLaserShootUp == false)
         {
             ShootDown();
         }
     }
 
     void ShootUp()
-        {
+    {
 
         transform.Translate(Vector3.up * _laserSpeed * Time.deltaTime);
 
         if (transform.position.y > 8f)
         {
             Destroy(this.gameObject);
-        }  
+        }
     }
 
     void ShootDown()
@@ -58,12 +57,12 @@ public class Laser : MonoBehaviour
         transform.Translate(Vector3.down * _laserSpeed * Time.deltaTime);
 
         if (transform.position.y < -8f)
-        {      
+        {
             Destroy(this.gameObject);
         }
     }
 
- 
+
 
     public void EnemyLaserOn()
     {
@@ -85,7 +84,7 @@ public class Laser : MonoBehaviour
         {
             Player player = other.GetComponent<Player>();
 
-            if ( player != null)
+            if (player != null)
             {
                 player.Damage();
             }
@@ -97,3 +96,5 @@ public class Laser : MonoBehaviour
     }
 
 }
+
+

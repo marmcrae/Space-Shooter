@@ -147,7 +147,8 @@ MonoBehaviour:
   _powerUpSpeed: 3
   powerupId: 7
   _powerClip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
-  _homingMissilePrefab: {fileID: 0}
+  _homingMissilePrefab: {fileID: 7812496154631183564, guid: 5366d232a82321c43b5ba236242a63a4,
+    type: 3}
 --- !u!1 &7028952688986651485
 GameObject:
   m_ObjectHideFlags: 0

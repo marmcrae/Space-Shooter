@@ -19,6 +19,9 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject[] _enemies;
 
+    [SerializeField]
+    private GameObject _flashPrefab;
+
     private int _maxEnemies = 1;
     private int _enemyInstantiationCount = 0;
     private int _enemyCount = 0;
@@ -27,6 +30,7 @@ public class SpawnManager : MonoBehaviour
 
     private float _waveCoolDown = 1f;
     private bool _stopSpawning = false;
+    private bool _powerUpSpawn = false;
 
     private UIManager _uiManager;
     private GameObject _enemy;
@@ -42,12 +46,13 @@ public class SpawnManager : MonoBehaviour
         {
             Debug.Log("UI Manager is NULL");
         }
+
+        _powerUpSpawn = true;
     }
 
     private void Update()
     {
   
-
     }
 
 
@@ -96,7 +101,7 @@ public class SpawnManager : MonoBehaviour
                 //_enemyCount = 0;
                 _uiManager.UpdateLevel(_waveNumber);
                 _waveNumber += 1;
-                _maxEnemies += 1;
+                _maxEnemies += 2;
                 _stopSpawning = false;
 
                 yield return new WaitForSeconds(2f);
@@ -114,40 +119,37 @@ public class SpawnManager : MonoBehaviour
     IEnumerator SpawnPowerUpRoutine()
     {
         yield return new WaitForSeconds(2f);
-        Debug.Log("PowerUp called");
 
-        while (_stopSpawning == false)
+       if (_stopSpawning == false)
         {
-            int randomPowerUp = Random.Range(0, 11);
-            Debug.Log("random number: " + randomPowerUp);
-
-            if (randomPowerUp <= 2)
-            //6 = super laser | 7 = missile
+            while (_powerUpSpawn == true)
             {
-                Instantiate(_powerUp[Random.Range(6, 8)], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-                yield return new WaitForSeconds(3f);
-                Debug.Log("random number 6 /  7: ");
+                int randomPowerUp = Random.Range(0, 11);
 
-
-            }
-            else if (randomPowerUp > 2 && randomPowerUp < 7)
-            //5 = Ammo Boost | 4 = health
-            {
-                Instantiate(_powerUp[Random.Range(4, 6)], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-                yield return new WaitForSeconds(1f);
-                Debug.Log("random number 4 / 5 : ");
-            }
-            else
-            {
-                Instantiate(_powerUp[Random.Range(0, 4)], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
-                yield return new WaitForSeconds(2f);
-                Debug.Log("random number: 0 - 3");
-
+                if (randomPowerUp < 2)
+                //6 = super laser | 7 = missile
+                {
+                    Instantiate(_powerUp[Random.Range(6, 7)], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                    yield return new WaitForSeconds(10f);
+                }
+                else if (randomPowerUp >= 2 && randomPowerUp < 7)
+                //5 = Ammo Boost | 4 = health
+                {
+                    Instantiate(_powerUp[Random.Range(4, 6)], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                    yield return new WaitForSeconds(2f);            
+                }
+                else
+                {
+                    Instantiate(_powerUp[Random.Range(0, 4)], new Vector3(Random.Range(-8f, 8f), 7, 0), Quaternion.identity);
+                    yield return new WaitForSeconds(5f);
+               }
+                _powerUpSpawn = false;
+                yield return null;
+                _powerUpSpawn = true;
             }
             yield return null;
-        }
+        }    
     }
-
 
 
     public void AddEnemyCount()
@@ -164,20 +166,48 @@ public class SpawnManager : MonoBehaviour
 
 
     void BossWave()
-    {     
-        _bossEnemy = Instantiate(_bossEnemyPrefab, new Vector3(-1f, 1.4f, 0), Quaternion.identity);
+    {
+ 
+       
         StartCoroutine(BossWaveWait());
+       
     }
 
 
     IEnumerator BossWaveWait()
     {
-        yield return new WaitForSeconds(10f);     
+        _flashPrefab.gameObject.SetActive(true);
+        yield return new WaitForSeconds(.15f);
+        _flashPrefab.gameObject.SetActive(false);
+        yield return new WaitForSeconds(.20f);
+        _flashPrefab.gameObject.SetActive(true);
+        yield return new WaitForSeconds(.10f);
+        _flashPrefab.gameObject.SetActive(false);
+        _flashPrefab.gameObject.SetActive(true);
+        yield return new WaitForSeconds(.05f);
+        _flashPrefab.gameObject.SetActive(false);
+        yield return new WaitForSeconds(.15f);
+        _flashPrefab.gameObject.SetActive(true);
+        yield return new WaitForSeconds(.10f);
+        _flashPrefab.gameObject.SetActive(false);
+        _flashPrefab.gameObject.SetActive(true);
+        yield return new WaitForSeconds(.05f);
+        _flashPrefab.gameObject.SetActive(false);
+        yield return new WaitForSeconds(.15f);
+        _flashPrefab.gameObject.SetActive(true);
+        yield return new WaitForSeconds(.10f);
+        _flashPrefab.gameObject.SetActive(false);
+        yield return new WaitForSeconds(3f);
+
+        _bossEnemy = Instantiate(_bossEnemyPrefab, new Vector3(-1f, 1.4f, 0), Quaternion.identity);
+
+        StopAllCoroutines();
     }
 
 
     public void OnPlayerDeath()
     {
         _stopSpawning = true;
+        StopAllCoroutines();
     }
 } 

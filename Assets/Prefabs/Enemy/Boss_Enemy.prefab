@@ -151,6 +151,8 @@ MonoBehaviour:
     type: 3}
   _enemyShieldSprite: {fileID: 5025301637026073643, guid: 35dd8f8a7c8fc6d4dbfec76bdc84eb86,
     type: 3}
+  _flashPrefab: {fileID: 9044017344624686810, guid: ec96198c328fb2b4c92b9b358c4ae71c,
+    type: 3}
   _frequency: 1
   _magnitude: 10
   _speed: 5

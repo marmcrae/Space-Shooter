@@ -25,8 +25,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 591685495971072532}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.006, y: 0.112, z: 0}
-  m_LocalScale: {x: 0.43435827, y: 1.2236161, z: 1.4285715}
+  m_LocalPosition: {x: -0, y: -0.7, z: 0}
+  m_LocalScale: {x: 1.7730641, y: 39.146484, z: 1.4285715}
   m_Children: []
   m_Father: {fileID: 7236394642157407827}
   m_RootOrder: 0
@@ -109,8 +109,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2020063937209140646}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.02, y: 2.159, z: 0}
-  m_LocalScale: {x: 5, y: 2, z: 0.7}
+  m_LocalPosition: {x: -0.925, y: 2.531, z: 0}
+  m_LocalScale: {x: 2.4838464, y: 0.8300064, z: 0.7}
   m_Children:
   - {fileID: 2481428404368501862}
   m_Father: {fileID: 0}
@@ -180,6 +180,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _laserSpeed: 8
   _isEnemyLaser: 0
+  _isEnemyLaserShootUp: 0
+  player: {fileID: 0}
 --- !u!50 &8858797865539491327
 Rigidbody2D:
   serializedVersion: 4
@@ -214,7 +216,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0036133528, y: 0.17827463}
+  m_Offset: {x: -0.037727594, y: 10.587597}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -225,5 +227,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.4742343, y: 4.488043}
+  m_Size: {x: 5.5709033, y: 150.97357}
   m_EdgeRadius: 0

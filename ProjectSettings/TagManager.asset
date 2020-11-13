@@ -15,6 +15,7 @@ TagManager:
   - BossEnemy
   - EnemyShield
   - HomingMissile
+  - SuperLaser
   layers:
   - Default
   - TransparentFX

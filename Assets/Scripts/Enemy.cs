@@ -17,6 +17,9 @@ public class Enemy : MonoBehaviour
     private GameObject _enemyShieldSprite;
 
     [SerializeField]
+    private GameObject _flashPrefab;
+
+    [SerializeField]
     private float _frequency = 1.0f;
    
     [SerializeField]
@@ -58,9 +61,11 @@ public class Enemy : MonoBehaviour
 
     private Player _player;
     private Animator _animator;
+    private GameObject _homingAnimator;
     private SpawnManager _spawnManager;
     private ShakeBehavior _shakeBehavior;
     private UIManager _uiManager;
+    private HomingMissile _homingMissile;
 
     Vector3 position = new Vector3();
     Vector3 pos;
@@ -98,6 +103,8 @@ public class Enemy : MonoBehaviour
         _player = GameObject.Find("Player").GetComponent<Player>(); 
         _shakeBehavior = GameObject.Find("Main Camera").GetComponent<ShakeBehavior>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _animator = GetComponent<Animator>();
+        
 
         if (_uiManager == null)
         {
@@ -109,7 +116,7 @@ public class Enemy : MonoBehaviour
             Debug.LogError("Player is NULL");
         }
 
-        _animator = GetComponent<Animator>();
+        _animator = GetComponent<Animator>(); 
 
         if (_animator == null)
         {
@@ -304,11 +311,39 @@ public class Enemy : MonoBehaviour
             }
         }
 
-
-        if (other.tag == "HomingMissile" && tag != "BossEnemy" && _isEnemyShieldActive == false)
+        if (other.tag == "SuperLaser" && tag != "BossEnemy" && _isEnemyShieldActive == false)
         {
-            Destroy(other.gameObject);
-            _animator.SetTrigger("OnDestroy");
+            Destroy(other.gameObject, 1.5f);
+
+            if (_player != null)
+            {
+                Destroy(this.gameObject, 1.5f);
+                _player.AddPoints(10);
+                _enemySpeed = 0f;
+                _frequency = 0f;
+                _animator.SetTrigger("OnEnemyDeath");
+                _isExploded = true;
+                other.GetComponent<Collider2D>().enabled = false;
+            }
+        }
+
+
+        if (other.tag == "HomingMissile" && tag != "BossEnemy")
+        {
+            _homingMissile = GameObject.FindWithTag("HomingMissile").GetComponent<HomingMissile>();
+
+            if(_homingMissile != null)
+            {
+                Destroy(other.gameObject, 2f);
+                _homingMissile.OnMissileDestroy();
+                _shakeBehavior.TriggerShake();
+            }
+            else
+            {
+                Debug.Log("HOMING MISSILE IS NULL");
+            }
+           
+            
             if (_player != null)
             {
                 _enemySpeed = 0f;
@@ -323,7 +358,7 @@ public class Enemy : MonoBehaviour
 
 
 
-        if (other.tag == "Laser" || other.tag == "Player" && tag == "EnemyShield" && _isEnemyShieldActive == true)
+        if (other.tag == "Laser" || other.tag == "SuperLaser" || other.tag == "Player" && tag == "EnemyShield" && _isEnemyShieldActive == true)
         {
             Destroy(other.gameObject);
             _isEnemyShieldActive = false;
@@ -349,7 +384,7 @@ public class Enemy : MonoBehaviour
 
 
 
-        if (tag == "BossEnemy" && other.tag == "Player" || other.tag == "Laser")
+        if (tag == "BossEnemy" && other.tag == "Player" || other.tag == "Laser" || other.tag == "SuperLaser")
         {
             _shakeBehavior.TriggerShake();
             _bossLives--;
@@ -368,7 +403,6 @@ public class Enemy : MonoBehaviour
 
                 if (_bossWinnerActive == true)
                 {
-                    Debug.Log("boss winner start coroutine called");
                     StartCoroutine(WinnerTextCoroutine());
                 }
             }
@@ -377,8 +411,25 @@ public class Enemy : MonoBehaviour
 
     IEnumerator WinnerTextCoroutine()
     {
-        yield return new WaitForSeconds(2f);
-        Debug.Log("Winner text called");
+        
+        /***************/
+        _flashPrefab.gameObject.SetActive(true);
+        yield return new WaitForSeconds(.15f);
+        _flashPrefab.gameObject.SetActive(false);
+        yield return new WaitForSeconds(.20f);
+        _flashPrefab.gameObject.SetActive(true);
+        yield return new WaitForSeconds(.10f);
+        _flashPrefab.gameObject.SetActive(false);
+        _flashPrefab.gameObject.SetActive(true);
+        yield return new WaitForSeconds(.05f);
+        _flashPrefab.gameObject.SetActive(false);
+        yield return new WaitForSeconds(.15f);
+        _flashPrefab.gameObject.SetActive(true);
+        yield return new WaitForSeconds(.10f);
+        _flashPrefab.gameObject.SetActive(false);
+        /******************/
+        yield return new WaitForSeconds(.5f);
+
         _uiManager.WinnerText();          
     }
 }

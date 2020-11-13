@@ -174,7 +174,7 @@ public class UIManager : MonoBehaviour
            
         if(_currentThrust < 25f)
         {    
-            _thrusterText.text = "Thruster is low!! Press X to refill";
+            _thrusterText.text = "THRUSTER IS LOW! PRESS X TO REFILL";
             _thrusterBackground.color = Color.red;
         }
         else

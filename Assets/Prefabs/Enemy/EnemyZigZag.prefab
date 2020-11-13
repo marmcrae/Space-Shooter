@@ -151,6 +151,8 @@ MonoBehaviour:
   _laserPrefab: {fileID: 5736944853930233339, guid: d97c2fe21d271d64ea94bcac4aeaec84,
     type: 3}
   _enemyShieldSprite: {fileID: 4393037774026003381}
+  _flashPrefab: {fileID: 9044017344624686810, guid: ec96198c328fb2b4c92b9b358c4ae71c,
+    type: 3}
   _frequency: 5
   _magnitude: 7
   _speed: 1

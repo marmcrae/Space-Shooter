@@ -57,7 +57,9 @@ public class Enemy : MonoBehaviour
     public bool _enemyAvoidShot = false;
 
     private float _canFire = -1;
-    private int _bossLives = 20;       
+
+    [SerializeField]
+    private int _bossLives = 50;       
 
     private Player _player;
     private Animator _animator;

@@ -33,6 +33,7 @@ public class SpawnManager : MonoBehaviour
     private bool _powerUpSpawn = false;
 
     private UIManager _uiManager;
+
     private GameObject _enemy;
     private GameObject _bossEnemy;
 
@@ -46,6 +47,7 @@ public class SpawnManager : MonoBehaviour
         {
             Debug.Log("UI Manager is NULL");
         }
+
 
         _powerUpSpawn = true;
     }
@@ -167,7 +169,7 @@ public class SpawnManager : MonoBehaviour
 
     void BossWave()
     {
- 
+        
        
         StartCoroutine(BossWaveWait());
        
@@ -176,6 +178,7 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator BossWaveWait()
     {
+        yield return new WaitForSeconds(3f);
         _flashPrefab.gameObject.SetActive(true);
         yield return new WaitForSeconds(.15f);
         _flashPrefab.gameObject.SetActive(false);

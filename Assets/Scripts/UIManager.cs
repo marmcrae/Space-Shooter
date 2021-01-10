@@ -54,6 +54,8 @@ public class UIManager : MonoBehaviour
     private float _currentThrust;
     private float _maxThrust = 100f;
 
+    private bool _gameIsOver;
+
     private GameManager _gameManager;
     private Player _player;
     private SpawnManager _spawnManager;
@@ -88,11 +90,16 @@ public class UIManager : MonoBehaviour
         _healthText.text = "Health";
         _ammoText.text = "CURRENT AMMO: " + _player._ammo.ToString();
         _maxAmmoText.text = "MAX AMMO: " + _player._maxAmmo.ToString();
+        _gameIsOver = false;
     }
 
     private void Update()
     {
-        ThrusterUpdate();
+        if (!_gameIsOver)
+        {
+            ThrusterUpdate();
+        }
+       
         HealthUpdate();
     }
 
@@ -219,6 +226,7 @@ public class UIManager : MonoBehaviour
 
     void GameOverSequence()
     {
+        _gameIsOver = true;
         _gameManager.GameOver();
         _gameOver.gameObject.SetActive(true);
         _restartText.gameObject.SetActive(true);
